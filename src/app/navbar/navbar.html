@@ -1,0 +1,32 @@
+<button class="menu-toggle" (click)="toggleMenu()" *ngIf="authService.isAuthenticated()">
+  <i class="fa fa-bars"></i>
+</button>
+
+<!-- Sidebar -->
+<nav class="sidebar" *ngIf="authService.isAuthenticated()" [class.open]="menuOpen">
+  <div class="sidebar-header">
+    <h2>FixHub</h2>
+  </div>
+
+  <ul class="sidebar-links">
+    <li>
+      <a routerLink="/home" routerLinkActive="active" (click)="closeMenu()">
+        <i class="fa fa-home"></i> Home
+      </a>
+    </li>
+    <li>
+      <a routerLink="/funcionarios" routerLinkActive="active" (click)="closeMenu()">
+        <i class="fa-solid fa-user-tie"></i> Funcionários
+      </a>
+    </li>
+    <li>
+      <a routerLink="/usuarios" routerLinkActive="active" (click)="closeMenu()">
+        <i class="fa fa-users"></i> Usuários
+      </a>
+    </li>
+  </ul>
+
+  <button class="btn-logout" (click)="logout()">
+    <i class="fa fa-sign-out-alt"></i> Logout
+  </button>
+</nav>
