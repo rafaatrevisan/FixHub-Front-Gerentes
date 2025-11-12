@@ -27,7 +27,7 @@ export class LoginComponent {
     'Content-Type': 'application/x-www-form-urlencoded'
   });
 
-  this.http.post('https://projeto-integrador-fixhub.onrender.com/api/fixhub/login', body, { headers }).subscribe(
+  this.http.post('https://projeto-integrador-fixhub.onrender.com/api/fixhub/admin/login', body, { headers }).subscribe(
     (response: any) => {
       localStorage.setItem('token', response.token);
       this.router.navigate(['/home']);

@@ -1,1 +1,179 @@
-<p>usuarios works!</p>
+<!-- Cabeçalho da Página -->
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fa fa-users me-3"></i>
+            Consulta de Usuários
+        </h1>
+        <p class="page-subtitle">Gerencie e visualize todos os usuários cadastrados</p>
+    </div>
+</div>
+
+<!-- Conteúdo Principal -->
+<div class="container main-container">
+
+    <!-- Formulário de Filtros -->
+    <form (ngSubmit)="listarUsuarios()">
+        <!-- Card de Filtros -->
+        <div class="filter-card">
+            <div class="filter-header d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fa fa-filter me-2"></i>
+                    <span>Filtros de Busca</span>
+                </div>
+                <button type="submit" class="btn btn-primary btn-search" title="Buscar">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
+            <div class="filter-body mt-3">
+                <div class="row g-3 align-items-end">
+
+                    <!-- Nome -->
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <label class="form-label">
+                            <i class="fa fa-user me-1"></i>
+                            Nome
+                        </label>
+                        <input class="form-control" type="text" [(ngModel)]="filtro.nome" name="nome"
+                            placeholder="Digite o nome">
+                    </div>
+
+                    <!-- Telefone -->
+                    <div class="col-lg-2 col-md-6 col-sm-12">
+                        <label class="form-label">
+                            <i class="fa fa-phone me-1"></i>
+                            Telefone
+                        </label>
+                        <input class="form-control" type="text" mask="(00) 00000-0000" [(ngModel)]="filtro.telefone"
+                            name="telefone" placeholder="(00) 00000-0000">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-lg-2 col-md-6 col-sm-12">
+                        <label class="form-label">
+                            <i class="fa fa-envelope me-1"></i>
+                            Email
+                        </label>
+                        <input class="form-control" type="text" [(ngModel)]="filtro.email" name="email"
+                            placeholder="exemplo@email.com">
+                    </div>
+
+                    <!-- Início Cadastro -->
+                    <div class="col-lg-2 col-md-6 col-sm-12">
+                        <label class="form-label">
+                            <i class="fa fa-calendar me-1"></i>
+                            Início Cadastro
+                        </label>
+                        <input class="form-control" type="date" [(ngModel)]="filtro.dataInicioCadastro"
+                            name="dataInicioCadastro">
+                    </div>
+
+                    <!-- Fim Cadastro -->
+                    <div class="col-lg-2 col-md-6 col-sm-12">
+                        <label class="form-label">
+                            <i class="fa fa-calendar me-1"></i>
+                            Fim Cadastro
+                        </label>
+                        <input class="form-control" type="date" [(ngModel)]="filtro.dataFimCadastro"
+                            name="dataFimCadastro">
+                    </div>
+
+                    <!-- Ativo -->
+                    <div class="col-lg-1 col-md-6 col-sm-12">
+                        <label class="form-label">
+                            <i class="fa fa-toggle-on me-1"></i>
+                            Ativo
+                        </label>
+                        <select class="form-select" [(ngModel)]="filtro.ativo" name="ativo">
+                            <option value="">Todos</option>
+                            <option value="true">Sim</option>
+                            <option value="false">Não</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Tabela de Usuários -->
+        <div class="table-card">
+            <div class="table-header">
+                <i class="fa fa-table me-2"></i>
+                <span>Lista de Usuários</span>
+                <span class="badge bg-primary ms-2">{{ usuarios.length || 0 }}</span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-modern">
+                    <thead>
+                        <tr>
+                            <th><i class="fa fa-user me-2"></i>Nome</th>
+                            <th><i class="fa fa-envelope me-2"></i>Email</th>
+                            <th><i class="fa fa-phone me-2"></i>Telefone</th>
+                            <th><i class="fa fa-birthday-cake me-2"></i>Data de Nascimento</th>
+                            <th class="text-center"><i class="fa fa-toggle-on me-2"></i>Status</th>
+                            <th class="text-center"><i class="fa fa-cog me-2"></i>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let u of usuarios" class="table-row">
+
+                            <!-- Nome -->
+                            <td>
+                                <input class="form-control form-control-sm" [(ngModel)]="u.nome" name="nome{{u.id}}" />
+                            </td>
+
+                            <!-- Email -->
+                            <td>
+                                <input class="form-control form-control-sm" [(ngModel)]="u.email"
+                                    name="email{{u.id}}" />
+                            </td>
+
+                            <!-- Telefone -->
+                            <td>
+                                <input class="form-control form-control-sm" mask="(00) 00000-0000"
+                                    [(ngModel)]="u.telefone" name="telefone{{u.id}}" />
+                            </td>
+
+                            <!-- Data de Nascimento -->
+                            <td>
+                                <input class="form-control form-control-sm" type="date" [(ngModel)]="u.dataNascimento"
+                                    name="dataNascimento{{u.id}}" style="padding-right: 80px;" />
+                            </td>
+
+                            <!-- Status -->
+                            <td class="text-center">
+                                <span class="status-badge" [class.status-active]="u.ativo"
+                                    [class.status-inactive]="!u.ativo">
+                                    <i class="fa" [ngClass]="u.ativo ? 'fa-check-circle' : 'fa-times-circle'"></i>
+                                    {{u.ativo ? 'Ativo' : 'Inativo'}}
+                                </span>
+                            </td>
+
+                            <!-- Ações -->
+                            <td class="text-center">
+                                <div class="btn-group-actions">
+                                    <button class="btn btn-icon btn-warning" (click)="editarUsuario(u)"
+                                        title="Salvar alterações">
+                                        <i class="fa fa-save"></i>
+                                    </button>
+                                    <button *ngIf="u.ativo" class="btn btn-icon btn-danger"
+                                        (click)="desativarUsuario(u.id)" title="Desativar usuário">
+                                        <i class="fa fa-user-slash"></i>
+                                    </button>
+                                    <button *ngIf="!u.ativo" class="btn btn-icon btn-success"
+                                        (click)="reativarUsuario(u.id)" title="Reativar usuário">
+                                        <i class="fa fa-user-check"></i>
+                                    </button>
+                                </div>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>

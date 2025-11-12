@@ -26,6 +26,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'funcionarios/cadastrar',
+        loadComponent: () => import('./funcionarios/cadastrar-funcionario/cadastrar-funcionario').then(m => m.CadastrarFuncionarioComponent),
+        canActivate: [AuthGuard]
+        },
+    {
         path: 'usuarios',
         loadComponent: () => import('./usuarios/usuarios').then(m => m.UsuariosComponent),
         canActivate: [AuthGuard]

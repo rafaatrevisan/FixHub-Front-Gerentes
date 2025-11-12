@@ -1,0 +1,177 @@
+/* ============================================
+   CABEÇALHO DA PÁGINA (TONALIDADE AJUSTADA)
+   ============================================ */
+.page-header {
+  background: linear-gradient(135deg, #0c9fe4 0%, #0884c0 100%);
+  padding: 2.5rem 0;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+  color: #ffffff;
+}
+
+.page-header .container {
+  text-align: left;
+}
+
+.page-title {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.page-title i {
+  color: #d1f1ff;
+}
+
+.page-subtitle {
+  color: #e0f7ff;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+
+/* ============================================
+   CARD DE FORMULÁRIO
+   ============================================ */
+.form-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  margin-bottom: 2rem;
+}
+
+.form-card-header {
+  background: linear-gradient(to right, var(--gray-50), #ffffff);
+  padding: 1.25rem 1.75rem;
+  border-bottom: 2px solid var(--primary-color);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--gray-700);
+  display: flex;
+  align-items: center;
+}
+
+.form-card-body {
+  padding: 2.5rem 1.5rem;
+  background: var(--gray-50);
+}
+
+.form-card-footer {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-top: 1px solid var(--gray-200);
+}
+
+/* ============================================
+   NOTA DE CAMPOS OBRIGATÓRIOS
+   ============================================ */
+.required-note {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--gray-600);
+}
+
+/* ============================================
+   FORM GROUP E LABELS
+   ============================================ */
+.form-group {
+  position: relative;
+}
+
+.form-label i {
+  color: var(--primary-color);
+  font-size: 0.9rem;
+}
+
+.form-text {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--gray-500);
+}
+
+/* ============================================
+   BOTÕES DE AÇÃO
+   ============================================ */
+.btn-action {
+  padding: 0.875rem 2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  min-width: 180px;
+}
+
+.btn-action:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+
+/* ============================================
+   INPUT E SELECT COM ÍCONES
+   ============================================ */
+.form-control:hover,
+.form-select:hover {
+  border-color: var(--gray-400);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: #ffffff;
+}
+
+/* ============================================
+   GAP UTILITY (para espaçamento entre botões)
+   ============================================ */
+.gap-3 {
+  gap: 1rem;
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+@media (max-width: 768px) {
+  .form-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .required-note {
+    margin-left: 0 !important;
+  }
+  
+  .btn-action {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .form-card-body {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+  
+  .page-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .form-card-header {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+}

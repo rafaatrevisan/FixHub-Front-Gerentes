@@ -1,0 +1,147 @@
+<!-- Cabeçalho da Página -->
+<div class="page-header">
+  <div class="container">
+    <h1 class="page-title">
+      <i class="fa fa-user-plus me-3"></i>
+      Cadastro de Funcionário
+    </h1>
+    <p class="page-subtitle">Preencha os dados abaixo para cadastrar um novo funcionário</p>
+  </div>
+</div>
+
+<!-- Conteúdo Principal -->
+<div class="container main-container">
+
+  <form (ngSubmit)="cadastrarFuncionario()">
+
+    <!-- Card de Formulário -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <i class="fa fa-clipboard-list"></i>
+        <span>Informações do Funcionário</span>
+        <span class="required-note ms-auto">
+          <span class="text-danger">*</span> Campos obrigatórios
+        </span>
+      </div>
+
+      <div class="form-card-body">
+
+        <!-- Nome -->
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="form-group mb-4">
+              <label class="form-label">
+                <i class="fa fa-user"></i>
+                Nome Completo
+                <span class="text-danger ms-1">*</span>
+              </label>
+              <input type="text" class="form-control" required [(ngModel)]="novoFuncionario.nome" name="nomeNovo"
+                placeholder="Digite o nome completo" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Telefone e Data de Nascimento -->
+        <div class="row justify-content-center">
+          <div class="col-lg-4 col-md-5 col-sm-12">
+            <div class="form-group mb-4">
+              <label class="form-label">
+                <i class="fa fa-phone"></i>
+                Telefone
+                <span class="text-danger ms-1">*</span>
+              </label>
+              <input type="text" class="form-control" required mask="(00) 00000-0000"
+                [(ngModel)]="novoFuncionario.telefone" name="telefoneNovo" placeholder="(00) 00000-0000" />
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-5 col-sm-12">
+            <div class="form-group mb-4">
+              <label class="form-label">
+                <i class="fa fa-calendar"></i>
+                Data de Nascimento
+                <span class="text-danger ms-1">*</span>
+              </label>
+              <input type="date" class="form-control" required [(ngModel)]="novoFuncionario.dataNascimento"
+                name="dataNascimentoNovo" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="form-group mb-4">
+              <label class="form-label">
+                <i class="fa fa-envelope"></i>
+                E-mail
+                <span class="text-danger ms-1">*</span>
+              </label>
+              <input type="email" class="form-control" required [(ngModel)]="novoFuncionario.email" name="emailNovo"
+                placeholder="exemplo@email.com" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Senha -->
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="form-group mb-4">
+              <label class="form-label">
+                <i class="fa fa-lock"></i>
+                Senha
+                <span class="text-danger ms-1">*</span>
+              </label>
+              <input type="password" class="form-control" required [(ngModel)]="novoFuncionario.senha" name="senhaNovo"
+                placeholder="Digite uma senha segura" />
+              <small class="form-text text-muted">
+                <i class="fa fa-info-circle me-1"></i>
+                A senha deve conter no mínimo 6 caracteres
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cargo -->
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="form-group mb-4">
+              <label class="form-label">
+                <i class="fa fa-briefcase"></i>
+                Cargo
+                <span class="text-danger ms-1">*</span>
+              </label>
+              <select class="form-select" required [(ngModel)]="novoFuncionario.cargo" name="cargoNovo">
+                <option value="" disabled selected>Selecione um cargo</option>
+                <option *ngFor="let c of cargos" [value]="c">{{c}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Rodapé do Card com Botões -->
+      <!-- Rodapé do Card com Botões -->
+      <div class="form-card-footer text-center">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="d-flex justify-content-center flex-wrap gap-3 mt-3">
+              <button type="submit" class="btn btn-success btn-action">
+                <i class="fa fa-save"></i>
+                Salvar Funcionário
+              </button>
+              <button type="button" class="btn btn-secondary btn-action" routerLink="/funcionarios">
+                <i class="fa fa-arrow-left"></i>
+                Voltar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </form>
+
+</div>

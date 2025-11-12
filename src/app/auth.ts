@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://projeto-integrador-fixhub.onrender.com/api/fixhub/login';
+  private apiUrl = 'https://projeto-integrador-fixhub.onrender.com/api/fixhub/admin/login';
   
   constructor(private router: Router) {}
 
