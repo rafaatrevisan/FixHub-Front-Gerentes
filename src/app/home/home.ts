@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { DashboardService } from '../services/dashboard.service';
-import { DashboardResumoDTO } from '../models/dashboard-resumo.model';
+import { DashboardService } from '../admin-dashboard/services/dashboard.service';
+import { DashboardResumoDTO } from '../admin-dashboard/models/dashboard-resumo.model';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  templateUrl: './home.html',
+  styleUrls: ['./home.css']
 })
 export class HomeComponent implements OnInit {
   

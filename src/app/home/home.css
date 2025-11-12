@@ -190,8 +190,7 @@ body {
   border-radius: var(--radius-lg);
   padding: 2rem;
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   box-shadow: var(--shadow-md);
   border: 2px solid transparent;
   transition: var(--transition);
