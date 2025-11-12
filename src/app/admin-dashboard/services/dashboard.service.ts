@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DashboardResumoDTO } from '../models/dashboard-resumo.model';
 import { GraficoTicketsDTO } from '../models/grafico-tickets.model';
 import { DesempenhoFuncionarioDTO } from '../models/desempenho-funcionario.model';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,38 +14,46 @@ export class DashboardService {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Obtém o resumo geral do dashboard
-   */
+  /** Monta o cabeçalho com token JWT */
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
+  /** Obtém o resumo geral do dashboard */
   getResumo(): Observable<DashboardResumoDTO> {
-    return this.http.get<DashboardResumoDTO>(`${this.baseUrl}/resumo`);
+    return this.http.get<DashboardResumoDTO>(`${this.baseUrl}/resumo`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  /**
-   * Obtém dados para gráfico de tickets por status
-   */
+  /** Obtém dados para gráfico de tickets por status */
   getTicketsPorStatus(): Observable<GraficoTicketsDTO[]> {
-    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/status`);
+    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/status`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  /**
-   * Obtém dados para gráfico de tickets por prioridade
-   */
+  /** Obtém dados para gráfico de tickets por prioridade */
   getTicketsPorPrioridade(): Observable<GraficoTicketsDTO[]> {
-    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/prioridade`);
+    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/prioridade`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  /**
-   * Obtém dados para gráfico de tickets por equipe
-   */
+  /** Obtém dados para gráfico de tickets por equipe */
   getTicketsPorEquipe(): Observable<GraficoTicketsDTO[]> {
-    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/equipe`);
+    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/equipe`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  /**
-   * Obtém desempenho dos funcionários
-   */
+  /** Obtém desempenho dos funcionários */
   getDesempenhoFuncionarios(): Observable<DesempenhoFuncionarioDTO[]> {
-    return this.http.get<DesempenhoFuncionarioDTO[]>(`${this.baseUrl}/funcionarios/desempenho`);
+    return this.http.get<DesempenhoFuncionarioDTO[]>(`${this.baseUrl}/funcionarios/desempenho`, {
+      headers: this.getAuthHeaders()
+    });
   }
 }

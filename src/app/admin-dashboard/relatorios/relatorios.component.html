@@ -1,5 +1,5 @@
 <!-- Cabeçalho da Página -->
-<div class="page-header">
+<div class="page-header mb-4">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center flex-wrap">
       <div>
@@ -9,16 +9,17 @@
         </h1>
         <p class="page-subtitle">Consulte e exporte relatórios detalhados dos tickets</p>
       </div>
-      <button class="btn btn-success btn-export" (click)="exportarCSV()" [disabled]="carregando">
-        <i class="fa fa-file-excel me-2"></i>
-        Exportar CSV
-      </button>
     </div>
   </div>
 </div>
 
 <!-- Conteúdo Principal -->
 <div class="container main-container">
+
+  <button class="btn btn-success" (click)="exportarCSV()" [disabled]="carregando">
+    <i class="fa fa-file-excel me-2"></i>
+    Exportar CSV
+  </button>
 
   <!-- ========== CARD DE FILTROS ========== -->
   <form (ngSubmit)="buscarRelatorio()">
@@ -27,21 +28,17 @@
         <i class="fa fa-filter me-2"></i>
         <span>Filtros de Busca</span>
       </div>
-      
+
       <div class="filter-body">
         <div class="row g-3">
-          
+
           <!-- Data Início -->
           <div class="col-lg-2 col-md-4 col-sm-6">
             <label class="form-label">
               <i class="fa fa-calendar me-1"></i>
               Data Início
             </label>
-            <input 
-              type="date" 
-              class="form-control" 
-              [(ngModel)]="filtros.dataInicio" 
-              name="dataInicio">
+            <input type="date" class="form-control" [(ngModel)]="filtros.dataInicio" name="dataInicio">
           </div>
 
           <!-- Data Fim -->
@@ -50,11 +47,7 @@
               <i class="fa fa-calendar me-1"></i>
               Data Fim
             </label>
-            <input 
-              type="date" 
-              class="form-control" 
-              [(ngModel)]="filtros.dataFim" 
-              name="dataFim">
+            <input type="date" class="form-control" [(ngModel)]="filtros.dataFim" name="dataFim">
           </div>
 
           <!-- Status -->
@@ -105,11 +98,7 @@
               <i class="fa fa-user me-1"></i>
               Funcionário
             </label>
-            <input 
-              type="text" 
-              class="form-control" 
-              [(ngModel)]="filtros.funcionario" 
-              name="funcionario" 
+            <input type="text" class="form-control" [(ngModel)]="filtros.funcionario" name="funcionario"
               placeholder="Nome">
           </div>
 
@@ -117,7 +106,7 @@
 
         <!-- Botões de Ação -->
         <div class="filter-actions mt-4">
-          <button type="submit" class="btn btn-primary" [disabled]="carregando">
+          <button type="submit" class="btn btn-primary btn-search" [disabled]="carregando">
             <i class="fa fa-search me-2"></i>
             Buscar
           </button>
@@ -137,8 +126,8 @@
       <span><strong>{{ ticketsFiltrados.length }}</strong> tickets encontrados</span>
     </div>
     <div class="summary-pagination">
-      <span>Mostrando {{ (paginaAtual - 1) * itensPorPagina + 1 }} 
-        a {{ Math.min(paginaAtual * itensPorPagina, ticketsFiltrados.length) }} 
+      <span>Mostrando {{ (paginaAtual - 1) * itensPorPagina + 1 }}
+        a {{ Math.min(paginaAtual * itensPorPagina, ticketsFiltrados.length) }}
         de {{ ticketsFiltrados.length }}</span>
     </div>
   </div>
@@ -148,7 +137,7 @@
     <div class="table-header">
       <i class="fa fa-table me-2"></i>
       <span>Relatório Detalhado</span>
-      <span class="badge bg-primary ms-2">{{ ticketsFiltrados?.length || 0 }}</span>
+      <span class="badge bg-primary ms-2">{{ ticketsFiltrados.length || 0 }}</span>
     </div>
 
     <div class="table-responsive">
@@ -157,20 +146,19 @@
           <tr>
             <th class="text-center">ID</th>
             <th>Descrição</th>
-            <th>Cliente</th>
             <th class="text-center">Status</th>
             <th class="text-center">Prioridade</th>
-            <th>Equipe</th>
+            <th>Equipe Responsável</th>
             <th>Responsável</th>
-            <th class="text-center">Criado em</th>
-            <th class="text-center">Resolvido em</th>
+            <th class="text-center">Data Criação</th>
+            <th class="text-center">Data Atualização</th>
             <th class="text-center">Tempo</th>
           </tr>
         </thead>
         <tbody>
           <!-- Loading -->
           <tr *ngIf="carregando">
-            <td colspan="10" class="text-center">
+            <td colspan="9" class="text-center">
               <div class="loading-spinner-inline">
                 <i class="fa fa-spinner fa-spin me-2"></i>
                 Carregando relatório...
@@ -180,7 +168,7 @@
 
           <!-- Erro -->
           <tr *ngIf="!carregando && erro">
-            <td colspan="10" class="text-center">
+            <td colspan="9" class="text-center">
               <div class="error-message-inline">
                 <i class="fa fa-exclamation-triangle me-2"></i>
                 {{ mensagemErro }}
@@ -190,7 +178,7 @@
 
           <!-- Sem Dados -->
           <tr *ngIf="!carregando && !erro && ticketsFiltrados.length === 0">
-            <td colspan="10" class="text-center">
+            <td colspan="9" class="text-center">
               <div class="empty-state">
                 <i class="fa fa-inbox"></i>
                 <p>Nenhum ticket encontrado com os filtros aplicados</p>
@@ -201,28 +189,27 @@
           <!-- Dados -->
           <tr *ngFor="let ticket of getTicketsPaginados()">
             <td class="text-center">
-              <span class="ticket-id">#{{ ticket.id }}</span>
+              <span class="ticket-id">{{ ticket.id }}</span>
             </td>
             <td>
               <div class="ticket-description">
                 {{ ticket.descricao }}
               </div>
             </td>
-            <td>
-              <span class="text-muted">{{ ticket.cliente || '-' }}</span>
-            </td>
             <td class="text-center">
-              <span class="badge-status" [ngClass]="getClasseStatus(ticket.status)">
+              <span class="status-indicador" [ngClass]="getClasseStatus(ticket.status)">
+                <span class="status-bolinha"></span>
                 {{ ticket.status.replace('_', ' ') }}
               </span>
             </td>
             <td class="text-center">
               <span class="badge-priority" [ngClass]="getClassePrioridade(ticket.prioridade)">
-                {{ ticket.prioridade }}
+                <span class="priority-bolinha"></span> 
+                {{ ticket.prioridade }} 
               </span>
             </td>
             <td>
-              <span class="badge badge-secondary">{{ ticket.equipe }}</span>
+              <span class="badge badge-secondary">{{ ticket.equipeResponsavel || '-' }}</span>
             </td>
             <td>
               <div class="responsavel-info">

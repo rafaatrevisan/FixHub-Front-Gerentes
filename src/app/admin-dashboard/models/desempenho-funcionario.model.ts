@@ -1,9 +1,7 @@
 export interface DesempenhoFuncionarioDTO {
-  id: number;
-  nome: string;
+  idFuncionario: number;
+  nomeFuncionario: string;
   cargo: string;
-  totalTicketsResolvidos: number;
+  ticketsResolvidos: number;
   tempoMedioResolucao: number;
-  ticketsEmAndamento?: number;
-  avaliacaoMedia?: number;
 }

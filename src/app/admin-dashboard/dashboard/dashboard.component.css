@@ -1,15 +1,126 @@
 /* ============================================
+   IMPORTAÇÃO DE FONTE
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================
+   VARIÁVEIS GLOBAIS
+   ============================================ */
+:root {
+  /* Cores Primárias */
+  --primary-color: #0c9fe4;
+  --primary-hover: #0884c0;
+  --primary-light: #d1f1ff;
+
+  /* Cores Secundárias */
+  --success-color: #10b981;
+  --success-hover: #059669;
+  --success-light: #d1fae5;
+
+  --warning-color: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-light: #fef3c7;
+
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
+  --danger-light: #fee2e2;
+
+  /* Cores Neutras */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+
+  /* Radius e Transição */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition: all 0.3s ease;
+}
+
+/* ============================================
+   ESTILO GLOBAL
+   ============================================ */
+*:not(i):not(.fa):not(.fa-solid):not(.fa-regular):not(.fa-brands) {
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+  color: var(--gray-800);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ============================================
+   CABEÇALHO DA PÁGINA (TONALIDADE AJUSTADA)
+   ============================================ */
+.page-header {
+  background: linear-gradient(135deg, #0c9fe4 0%, #0884c0 100%);
+  padding: 2.5rem 0;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+  color: #ffffff;
+}
+
+.page-header .container {
+  text-align: left;
+}
+
+.page-title {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.page-title i {
+  color: #d1f1ff;
+}
+
+.page-subtitle {
+  color: #e0f7ff;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+/* ============================================
    BOTÃO DE ATUALIZAÇÃO
    ============================================ */
 .btn-refresh {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
   padding: 0.75rem 1.5rem;
   font-weight: 600;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .btn-refresh:hover {
+  background-color: var(--primary-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
@@ -119,7 +230,7 @@
 
 .stat-card-info .stat-icon {
   background: #cffafe;
-    color: #06b6d4;
+  color: #06b6d4;
 }
 
 .stat-card-purple::before {
@@ -178,6 +289,7 @@
 .chart-item-label {
   font-weight: 600;
   font-size: 0.875rem;
+  color: var(--gray-700);
 }
 
 .chart-item-bar .progress {
@@ -214,25 +326,24 @@
 }
 
 /* Status Badges */
-.badge-aberto {
-  background: var(--danger-light);
-  color: var(--danger-color);
+.badge-pendente {
+  background: #d1ecf9;
+  color: #0077b6;
 }
 
-.badge-em.andamento,
-.badge-andamento {
-  background: var(--warning-light);
-  color: var(--warning-color);
+.badge-em_andamento {
+  background: #fef3c7;
+  color: #f59e0b;
 }
 
-.badge-resolvido {
-  background: var(--success-light);
-  color: var(--success-color);
+.badge-concluido {
+  background: #d1fae5;
+  color: #10b981;
 }
 
-.badge-fechado {
-  background: var(--gray-200);
-  color: var(--gray-600);
+.badge-reprovado {
+  background: #e5e7eb;
+  color: #4b5563;
 }
 
 /* Priority Badges */
@@ -241,20 +352,19 @@
   color: #1e40af;
 }
 
-.priority-media,
-.priority-média {
-  background: var(--warning-light);
-  color: var(--warning-color);
+.priority-regular {
+  background: #fff78d;
+  color: #a88b0a;
 }
 
-.priority-alta {
+.priority-importante {
   background: #fed7aa;
   color: #c2410c;
 }
 
 .priority-urgente {
-  background: var(--danger-light);
-  color: var(--danger-color);
+  background: #ef4444;
+  color: #fee2e2;
 }
 
 /* Progress Bar Colors */
@@ -274,74 +384,53 @@
   background: linear-gradient(90deg, var(--gray-500), var(--gray-600));
 }
 
+/* Priority */
 .bg-priority-baixa {
   background: linear-gradient(90deg, #3b82f6, #2563eb);
 }
 
-.bg-priority-media,
-.bg-priority-média {
-  background: linear-gradient(90deg, var(--warning-color), var(--warning-hover));
+.bg-priority-regular{
+  background: linear-gradient(90deg, #fff78d, #a88b0a);
 }
 
-.bg-priority-alta {
+.bg-priority-importante {
   background: linear-gradient(90deg, #f97316, #ea580c);
 }
 
 .bg-priority-urgente {
-  background: linear-gradient(90deg, var(--danger-color), var(--danger-hover));
+  background: linear-gradient(90deg, #ef4444, #dc2626);
 }
 
 /* ============================================
    LOADING E ERRO
    ============================================ */
-.loading-spinner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-  color: var(--gray-500);
-}
-
-.loading-spinner i {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.loading-spinner p {
-  font-weight: 500;
-  margin: 0;
-}
-
-.loading-spinner-inline {
-  padding: 2rem;
-  color: var(--gray-500);
-  font-weight: 500;
-}
-
+.loading-spinner,
 .error-message {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 200px;
+}
+
+.loading-spinner {
+  color: var(--gray-500);
+}
+
+.error-message {
   color: var(--danger-color);
 }
 
+.loading-spinner i,
 .error-message i {
   font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
+.loading-spinner p,
 .error-message p {
   font-weight: 500;
   margin: 0;
-}
-
-.error-message-inline {
-  padding: 2rem;
-  color: var(--danger-color);
-  font-weight: 500;
 }
 
 /* ============================================
@@ -360,10 +449,10 @@
 .time-badge {
   display: inline-block;
   padding: 0.375rem 0.75rem;
-  background: var(--gray-100);
-  border-radius: var(--radius-sm);
+  background: #f3f4f6; 
+  border-radius: 6px; 
   font-weight: 600;
-  color: var(--gray-700);
+  color: #374151;
   font-size: 0.875rem;
 }
 
@@ -434,23 +523,23 @@
 }
 
 .badge-secondary {
-  background: var(--gray-200);
-  color: var(--gray-700);
+  background: #e5e7eb;
+  color: #374151;
 }
 
 .badge-success {
-  background: var(--success-light);
-  color: var(--success-color);
+  background: #d1fae5;
+  color: #10b981;
 }
 
 .badge-warning {
-  background: var(--warning-light);
-  color: var(--warning-color);
+  background: #fef3c7;
+  color: #f59e0b;
 }
 
 .badge-primary {
-  background: var(--primary-light);
-  color: var(--primary-color);
+  background: #d1f1ff;
+  color: #0c9fe4;
 }
 
 /* ============================================
@@ -463,12 +552,6 @@
 }
 
 @media (max-width: 768px) {
-  .page-header .d-flex {
-    flex-direction: column;
-    align-items: flex-start !important;
-    gap: 1rem;
-  }
-
   .btn-refresh {
     width: 100%;
   }
@@ -524,3 +607,18 @@
     text-align: left;
   }
 }
+
+.btn-primary {
+  background-color: #0c9fe4;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0884c0;
+  border: none;
+}
+
+.bg-primary {
+  background-color: #0c9fe4 !important;
+}
+

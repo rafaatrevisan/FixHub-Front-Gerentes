@@ -3,9 +3,14 @@ import { DashboardService } from '../services/dashboard.service';
 import { DashboardResumoDTO } from '../models/dashboard-resumo.model';
 import { GraficoTicketsDTO } from '../models/grafico-tickets.model';
 import { DesempenhoFuncionarioDTO } from '../models/desempenho-funcionario.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true,
+  imports: [
+    CommonModule
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -38,11 +43,22 @@ export class DashboardComponent implements OnInit {
   erroGraficos = false;
   erroDesempenho = false;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
     this.carregarDadosDashboard();
   }
+
+  /**
+   * Tira acentos e converte tudo para minúsculo
+   */
+  normalizarPrioridade(categoria: string): string {
+  if (!categoria) return 'desconhecida';
+  return categoria
+    .normalize('NFD')                
+    .replace(/[\u0300-\u036f]/g, '') 
+    .toLowerCase();                 
+}
 
   /**
    * Carrega todos os dados do dashboard
@@ -62,7 +78,7 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.getResumo().subscribe({
       next: (data) => {
-        this.resumo = data;
+        this.resumo = data ?? this.resumo;
         this.carregandoResumo = false;
       },
       error: (error) => {
@@ -80,10 +96,10 @@ export class DashboardComponent implements OnInit {
     this.carregandoGraficos = true;
     this.erroGraficos = false;
 
-    // Carrega tickets por status
+    // Tickets por Status
     this.dashboardService.getTicketsPorStatus().subscribe({
       next: (data) => {
-        this.ticketsPorStatus = data;
+        this.ticketsPorStatus = data ?? [];
       },
       error: (error) => {
         console.error('Erro ao carregar tickets por status:', error);
@@ -91,10 +107,10 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    // Carrega tickets por prioridade
+    // Tickets por Prioridade
     this.dashboardService.getTicketsPorPrioridade().subscribe({
       next: (data) => {
-        this.ticketsPorPrioridade = data;
+        this.ticketsPorPrioridade = data ?? [];
       },
       error: (error) => {
         console.error('Erro ao carregar tickets por prioridade:', error);
@@ -102,10 +118,10 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    // Carrega tickets por equipe
+    // Tickets por Equipe
     this.dashboardService.getTicketsPorEquipe().subscribe({
       next: (data) => {
-        this.ticketsPorEquipe = data;
+        this.ticketsPorEquipe = data ?? [];
         this.carregandoGraficos = false;
       },
       error: (error) => {
@@ -125,7 +141,7 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.getDesempenhoFuncionarios().subscribe({
       next: (data) => {
-        this.desempenhoFuncionarios = data;
+        this.desempenhoFuncionarios = data ?? [];
         this.carregandoDesempenho = false;
       },
       error: (error) => {
@@ -139,24 +155,25 @@ export class DashboardComponent implements OnInit {
   /**
    * Formata tempo em minutos para horas e minutos
    */
-  formatarTempo(minutos: number): string {
-    if (!minutos) return '0min';
-    
-    const horas = Math.floor(minutos / 60);
-    const mins = Math.round(minutos % 60);
-    
-    if (horas > 0) {
-      return `${horas}h ${mins}min`;
-    }
-    return `${mins}min`;
+  formatarTempo(minutos?: number): string {
+    const valor = minutos ?? 0;
+
+    if (valor <= 0) return '0min';
+
+    const horas = Math.floor(valor / 60);
+    const mins = Math.round(valor % 60);
+
+    return horas > 0 ? `${horas}h ${mins}min` : `${mins}min`;
   }
 
   /**
    * Retorna classe CSS baseada no percentual de SLA
    */
   getClasseSLA(): string {
-    if (this.resumo.percentualSLA >= 90) return 'text-success';
-    if (this.resumo.percentualSLA >= 70) return 'text-warning';
+    const sla = this.resumo.percentualSLA ?? 0;
+
+    if (sla >= 90) return 'text-success';
+    if (sla >= 70) return 'text-warning';
     return 'text-danger';
   }
 
