@@ -1,10 +1,261 @@
 <!-- Cabeçalho da Página -->
 <div class="page-header">
   <div class="container">
-    <h1 class="page-title">
-      <i class="fa fa-home me-3"></i>
-      Página Inicial
-    </h1>
-    <p class="page-subtitle">Bem-vindo ao FixHub!</p>
+    <div class="header-content">
+      <div class="welcome-section">
+        <h1 class="page-title">
+          <i class="fa fa-home me-3"></i>
+          Bem-vindo ao FixHub - Admin
+        </h1>
+        <p class="page-subtitle">
+          Sistema integrado de gestão de tickets e suporte técnico
+        </p>
+      </div>
+      <div class="user-info-card">
+        <div class="user-avatar">
+          <i class="fa fa-user-circle"></i>
+        </div>
+        <div class="user-details">
+          <span class="user-name">{{ usuarioLogado?.nome || 'Usuário' }}</span>
+          <span class="user-role">{{ usuarioLogado?.cargo || 'Cargo' }}</span>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
+
+<!-- Conteúdo Principal -->
+<div class="container main-container">
+
+  <!-- ========== CARDS DE ACESSO RÁPIDO ========== -->
+  <div class="section-header">
+    <h2 class="section-title">
+      <i class="fa fa-bolt me-2"></i>
+      Acesso Rápido
+    </h2>
+    <p class="section-subtitle">Navegue rapidamente pelos principais módulos do sistema</p>
+  </div>
+
+  <div class="row g-4 mb-5">
+
+    <!-- Card: Dashboard -->
+    <div class="col-lg-3 col-md-6 col-sm-12">
+      <div class="quick-access-card card-dashboard" routerLink="/dashboard">
+        <div class="card-icon">
+          <i class="fa fa-chart-line"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Dashboard</h3>
+          <p class="card-description">Métricas e indicadores de desempenho</p>
+        </div>
+        <div class="card-arrow">
+          <i class="fa fa-arrow-right"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card: Relatórios -->
+    <div class="col-lg-3 col-md-6 col-sm-12">
+      <div class="quick-access-card card-relatorios" routerLink="/relatorios">
+        <div class="card-icon">
+          <i class="fa fa-file-alt"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Relatórios</h3>
+          <p class="card-description">Consulte e exporte relatórios detalhados</p>
+        </div>
+        <div class="card-arrow">
+          <i class="fa fa-arrow-right"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card: Funcionários -->
+    <div class="col-lg-3 col-md-6 col-sm-12">
+      <div class="quick-access-card card-funcionarios" routerLink="/funcionarios">
+        <div class="card-icon">
+          <i class="fa fa-users"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Funcionários</h3>
+          <p class="card-description">Gerencie a equipe e colaboradores</p>
+        </div>
+        <div class="card-arrow">
+          <i class="fa fa-arrow-right"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card: Usuários -->
+    <div class="col-lg-3 col-md-6 col-sm-12">
+      <div class="quick-access-card card-usuarios" routerLink="/usuarios">
+        <div class="card-icon">
+          <i class="fa fa-user-cog"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Usuários</h3>
+          <p class="card-description">Administre usuários e permissões</p>
+        </div>
+        <div class="card-arrow">
+          <i class="fa fa-arrow-right"></i>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== RESUMO VISUAL (MINI DASHBOARD) ========== -->
+  <div class="section-header">
+    <h2 class="section-title">
+      <i class="fa fa-chart-pie me-2"></i>
+      Visão Geral do Sistema
+    </h2>
+    <p class="section-subtitle">Resumo das principais métricas em tempo real</p>
+  </div>
+
+  <div class="row g-4 mb-5">
+
+    <!-- Mini Card: Total Tickets -->
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+      <div class="mini-stat-card mini-card-primary">
+        <div class="mini-icon">
+          <i class="fa fa-ticket-alt"></i>
+        </div>
+        <div class="mini-content">
+          <h4 class="mini-value">
+            <span *ngIf="!carregando">{{ resumoGeral?.totalTickets ?? 0 }}</span>
+            <span *ngIf="carregando"><i class="fa fa-spinner fa-spin"></i></span>
+          </h4>
+          <p class="mini-label">Total de Tickets</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini Card: Tickets Abertos -->
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+      <div class="mini-stat-card mini-card-danger">
+        <div class="mini-icon">
+          <i class="fa fa-folder-open"></i>
+        </div>
+        <div class="mini-content">
+          <h4 class="mini-value">
+            <span *ngIf="!carregando">{{ resumoGeral?.ticketsAbertos ?? 0 }}</span>
+            <span *ngIf="carregando"><i class="fa fa-spinner fa-spin"></i></span>
+          </h4>
+          <p class="mini-label">Tickets Abertos</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini Card: Em Andamento -->
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+      <div class="mini-stat-card mini-card-warning">
+        <div class="mini-icon">
+          <i class="fa fa-spinner"></i>
+        </div>
+        <div class="mini-content">
+          <h4 class="mini-value">
+            <span *ngIf="!carregando">{{ resumoGeral?.ticketsEmAndamento ?? 0 }}</span>
+            <span *ngIf="carregando"><i class="fa fa-spinner fa-spin"></i></span>
+          </h4>
+          <p class="mini-label">Em Andamento</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini Card: Resolvidos -->
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+      <div class="mini-stat-card mini-card-success">
+        <div class="mini-icon">
+          <i class="fa fa-check-circle"></i>
+        </div>
+        <div class="mini-content">
+          <h4 class="mini-value">
+            <span *ngIf="!carregando">{{ resumoGeral?.ticketsResolvidos ?? 0 }}</span>
+            <span *ngIf="carregando"><i class="fa fa-spinner fa-spin"></i></span>
+          </h4>
+          <p class="mini-label">Tickets Resolvidos</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== AÇÕES RÁPIDAS ========== -->
+  <div class="section-header">
+    <h2 class="section-title">
+      <i class="fa fa-tasks me-2"></i>
+      Ações Rápidas
+    </h2>
+    <p class="section-subtitle">Realize operações comuns rapidamente</p>
+  </div>
+
+  <div class="row g-4 mb-5">
+
+    <!-- Ação: Ver Dashboard -->
+    <div class="col-lg-4 col-md-6 col-sm-12">
+      <div class="action-card" routerLink="/dashboard">
+        <div class="action-icon-wrapper bg-primary">
+          <i class="fa fa-chart-line"></i>
+        </div>
+        <div class="action-content">
+          <h4 class="action-title">Visualizar Dashboard</h4>
+          <p class="action-description">Acesse métricas e gráficos detalhados</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ação: Cadastrar Funcionário -->
+    <div class="col-lg-4 col-md-6 col-sm-12">
+      <div class="action-card" routerLink="/funcionarios/cadastrar">
+        <div class="action-icon-wrapper bg-success">
+          <i class="fa fa-user-plus"></i>
+        </div>
+        <div class="action-content">
+          <h4 class="action-title">Novo Funcionário</h4>
+          <p class="action-description">Cadastre um novo colaborador</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ação: Exportar Relatórios -->
+    <div class="col-lg-4 col-md-6 col-sm-12">
+      <div class="action-card" routerLink="/relatorios">
+        <div class="action-icon-wrapper bg-info">
+          <i class="fa fa-file-download"></i>
+        </div>
+        <div class="action-content">
+          <h4 class="action-title">Exportar Relatórios</h4>
+          <p class="action-description">Gere relatórios em diversos formatos</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== INFORMAÇÕES DO SISTEMA ========== -->
+  <div class="system-info-card">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h3 class="info-title">
+          <i class="fa fa-info-circle me-2"></i>
+          Sobre o FixHub
+        </h3>
+        <p class="info-text">
+          Sistema desenvolvido para otimizar o gerenciamento de tickets do nível suporte, 
+          permitindo visualização e controle total sobre solicitações, equipes, funcionários e métricas de desempenho.
+        </p>
+        <p class="info-text mb-0">
+          <strong>Módulos disponíveis:</strong> Dashboard, Relatórios, Funcionários e Usuários.
+        </p>
+      </div>
+      <div class="col-md-4 text-end">
+        <div class="version-badge">
+          <i class="fa fa-code-branch me-2"></i>
+          Versão 1.0.0
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
