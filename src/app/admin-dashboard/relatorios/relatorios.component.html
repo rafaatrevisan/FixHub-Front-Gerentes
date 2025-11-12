@@ -1,0 +1,282 @@
+<!-- Cabeçalho da Página -->
+<div class="page-header">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+      <div>
+        <h1 class="page-title">
+          <i class="fa fa-file-alt me-3"></i>
+          Relatórios de Tickets
+        </h1>
+        <p class="page-subtitle">Consulte e exporte relatórios detalhados dos tickets</p>
+      </div>
+      <button class="btn btn-success btn-export" (click)="exportarCSV()" [disabled]="carregando">
+        <i class="fa fa-file-excel me-2"></i>
+        Exportar CSV
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Conteúdo Principal -->
+<div class="container main-container">
+
+  <!-- ========== CARD DE FILTROS ========== -->
+  <form (ngSubmit)="buscarRelatorio()">
+    <div class="filter-card">
+      <div class="filter-header">
+        <i class="fa fa-filter me-2"></i>
+        <span>Filtros de Busca</span>
+      </div>
+      
+      <div class="filter-body">
+        <div class="row g-3">
+          
+          <!-- Data Início -->
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <label class="form-label">
+              <i class="fa fa-calendar me-1"></i>
+              Data Início
+            </label>
+            <input 
+              type="date" 
+              class="form-control" 
+              [(ngModel)]="filtros.dataInicio" 
+              name="dataInicio">
+          </div>
+
+          <!-- Data Fim -->
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <label class="form-label">
+              <i class="fa fa-calendar me-1"></i>
+              Data Fim
+            </label>
+            <input 
+              type="date" 
+              class="form-control" 
+              [(ngModel)]="filtros.dataFim" 
+              name="dataFim">
+          </div>
+
+          <!-- Status -->
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <label class="form-label">
+              <i class="fa fa-info-circle me-1"></i>
+              Status
+            </label>
+            <select class="form-select" [(ngModel)]="filtros.status" name="status">
+              <option value="">Todos</option>
+              <option *ngFor="let status of statusOptions" [value]="status">
+                {{ status.replace('_', ' ') }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Prioridade -->
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <label class="form-label">
+              <i class="fa fa-exclamation-circle me-1"></i>
+              Prioridade
+            </label>
+            <select class="form-select" [(ngModel)]="filtros.prioridade" name="prioridade">
+              <option value="">Todas</option>
+              <option *ngFor="let prioridade of prioridadeOptions" [value]="prioridade">
+                {{ prioridade }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Equipe -->
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <label class="form-label">
+              <i class="fa fa-users me-1"></i>
+              Equipe
+            </label>
+            <select class="form-select" [(ngModel)]="filtros.equipe" name="equipe">
+              <option value="">Todas</option>
+              <option *ngFor="let equipe of equipeOptions" [value]="equipe">
+                {{ equipe }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Funcionário -->
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <label class="form-label">
+              <i class="fa fa-user me-1"></i>
+              Funcionário
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="filtros.funcionario" 
+              name="funcionario" 
+              placeholder="Nome">
+          </div>
+
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="filter-actions mt-4">
+          <button type="submit" class="btn btn-primary" [disabled]="carregando">
+            <i class="fa fa-search me-2"></i>
+            Buscar
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="limparFiltros()">
+            <i class="fa fa-eraser me-2"></i>
+            Limpar Filtros
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- ========== RESUMO DE RESULTADOS ========== -->
+  <div class="results-summary" *ngIf="!carregando && !erro">
+    <div class="summary-info">
+      <i class="fa fa-check-circle me-2"></i>
+      <span><strong>{{ ticketsFiltrados.length }}</strong> tickets encontrados</span>
+    </div>
+    <div class="summary-pagination">
+      <span>Mostrando {{ (paginaAtual - 1) * itensPorPagina + 1 }} 
+        a {{ Math.min(paginaAtual * itensPorPagina, ticketsFiltrados.length) }} 
+        de {{ ticketsFiltrados.length }}</span>
+    </div>
+  </div>
+
+  <!-- ========== TABELA DE RELATÓRIOS ========== -->
+  <div class="table-card">
+    <div class="table-header">
+      <i class="fa fa-table me-2"></i>
+      <span>Relatório Detalhado</span>
+      <span class="badge bg-primary ms-2">{{ ticketsFiltrados?.length || 0 }}</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-modern">
+        <thead>
+          <tr>
+            <th class="text-center">ID</th>
+            <th>Descrição</th>
+            <th>Cliente</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Prioridade</th>
+            <th>Equipe</th>
+            <th>Responsável</th>
+            <th class="text-center">Criado em</th>
+            <th class="text-center">Resolvido em</th>
+            <th class="text-center">Tempo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Loading -->
+          <tr *ngIf="carregando">
+            <td colspan="10" class="text-center">
+              <div class="loading-spinner-inline">
+                <i class="fa fa-spinner fa-spin me-2"></i>
+                Carregando relatório...
+              </div>
+            </td>
+          </tr>
+
+          <!-- Erro -->
+          <tr *ngIf="!carregando && erro">
+            <td colspan="10" class="text-center">
+              <div class="error-message-inline">
+                <i class="fa fa-exclamation-triangle me-2"></i>
+                {{ mensagemErro }}
+              </div>
+            </td>
+          </tr>
+
+          <!-- Sem Dados -->
+          <tr *ngIf="!carregando && !erro && ticketsFiltrados.length === 0">
+            <td colspan="10" class="text-center">
+              <div class="empty-state">
+                <i class="fa fa-inbox"></i>
+                <p>Nenhum ticket encontrado com os filtros aplicados</p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Dados -->
+          <tr *ngFor="let ticket of getTicketsPaginados()">
+            <td class="text-center">
+              <span class="ticket-id">#{{ ticket.id }}</span>
+            </td>
+            <td>
+              <div class="ticket-description">
+                {{ ticket.descricao }}
+              </div>
+            </td>
+            <td>
+              <span class="text-muted">{{ ticket.cliente || '-' }}</span>
+            </td>
+            <td class="text-center">
+              <span class="badge-status" [ngClass]="getClasseStatus(ticket.status)">
+                {{ ticket.status.replace('_', ' ') }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span class="badge-priority" [ngClass]="getClassePrioridade(ticket.prioridade)">
+                {{ ticket.prioridade }}
+              </span>
+            </td>
+            <td>
+              <span class="badge badge-secondary">{{ ticket.equipe }}</span>
+            </td>
+            <td>
+              <div class="responsavel-info">
+                <i class="fa fa-user-circle me-2"></i>
+                <span>{{ ticket.funcionarioResponsavel || '-' }}</span>
+              </div>
+            </td>
+            <td class="text-center">
+              <span class="date-badge">{{ formatarDataExibicao(ticket.dataCriacao) }}</span>
+            </td>
+            <td class="text-center">
+              <span class="date-badge">{{ formatarDataExibicao(ticket.dataResolucao) }}</span>
+            </td>
+            <td class="text-center">
+              <span class="time-badge">{{ formatarTempo(ticket.tempoResolucao) }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ========== PAGINAÇÃO ========== -->
+    <div class="pagination-wrapper" *ngIf="!carregando && !erro && ticketsFiltrados.length > 0">
+      <div class="pagination-info">
+        Página {{ paginaAtual }} de {{ getTotalPaginas() }}
+      </div>
+      <nav class="pagination-nav">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="paginaAtual === 1">
+            <button class="page-link" (click)="paginaAnterior()">
+              <i class="fa fa-chevron-left"></i>
+            </button>
+          </li>
+          <li class="page-item" *ngFor="let pagina of getPaginas()" [class.active]="pagina === paginaAtual">
+            <button class="page-link" (click)="irParaPagina(pagina)">
+              {{ pagina }}
+            </button>
+          </li>
+          <li class="page-item" [class.disabled]="paginaAtual === getTotalPaginas()">
+            <button class="page-link" (click)="proximaPagina()">
+              <i class="fa fa-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+      <div class="items-per-page">
+        <select class="form-select form-select-sm" [(ngModel)]="itensPorPagina" (change)="paginaAtual = 1">
+          <option [value]="10">10 por página</option>
+          <option [value]="25">25 por página</option>
+          <option [value]="50">50 por página</option>
+          <option [value]="100">100 por página</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+</div>

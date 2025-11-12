@@ -1,0 +1,332 @@
+/* ============================================
+   BOTÃO DE EXPORTAÇÃO
+   ============================================ */
+.btn-export {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.btn-export:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-export:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   AÇÕES DE FILTRO
+   ============================================ */
+.filter-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-actions .btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.filter-actions .btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   RESUMO DE RESULTADOS
+   ============================================ */
+.results-summary {
+  background: linear-gradient(135deg, var(--primary-light), #ffffff);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--primary-color);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.summary-info {
+  display: flex;
+  align-items: center;
+  color: var(--gray-700);
+  font-size: 0.95rem;
+}
+
+.summary-info i {
+  color: var(--success-color);
+  font-size: 1.25rem;
+}
+
+.summary-pagination {
+  color: var(--gray-600);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* ============================================
+   TICKET ID
+   ============================================ */
+.ticket-id {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  background: var(--primary-light);
+  color: var(--primary-color);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.875rem;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================
+   DESCRIÇÃO DO TICKET
+   ============================================ */
+.ticket-description {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--gray-700);
+  font-size: 0.875rem;
+}
+
+/* ============================================
+   INFO RESPONSÁVEL
+   ============================================ */
+.responsavel-info {
+  display: flex;
+  align-items: center;
+  color: var(--gray-700);
+  font-size: 0.875rem;
+}
+
+.responsavel-info i {
+  color: var(--primary-color);
+}
+
+/* ============================================
+   DATE BADGE
+   ============================================ */
+.date-badge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  background: var(--gray-100);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  color: var(--gray-700);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+/* ============================================
+   STATUS BADGES (RELATÓRIO)
+   ============================================ */
+.status-aberto {
+  background: var(--danger-light);
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+}
+
+.status-andamento {
+  background: var(--warning-light);
+  color: var(--warning-color);
+  border: 1px solid var(--warning-color);
+}
+
+.status-resolvido {
+  background: var(--success-light);
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
+}
+
+.status-fechado {
+  background: var(--gray-200);
+  color: var(--gray-600);
+  border: 1px solid var(--gray-400);
+}
+
+.status-default {
+  background: var(--gray-100);
+  color: var(--gray-600);
+  border: 1px solid var(--gray-300);
+}
+
+/* ============================================
+   PAGINAÇÃO
+   ============================================ */
+.pagination-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-top: 1px solid var(--gray-200);
+  background: var(--gray-50);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pagination-info {
+  color: var(--gray-600);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.pagination-nav .pagination {
+  margin: 0;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.pagination .page-item {
+  list-style: none;
+}
+
+.pagination .page-link {
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--gray-300);
+  background: #ffffff;
+  color: var(--gray-700);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+}
+
+.pagination .page-link:hover:not(:disabled) {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.pagination .page-item.active .page-link {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.pagination .page-item.disabled .page-link {
+  background: var(--gray-100);
+  color: var(--gray-400);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.items-per-page {
+  display: flex;
+  align-items: center;
+}
+
+.items-per-page .form-select-sm {
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+/* ============================================
+   RESPONSIVIDADE RELATÓRIOS
+   ============================================ */
+@media (max-width: 1200px) {
+  .ticket-description {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 992px) {
+  .page-header .d-flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+
+  .btn-export {
+    width: 100%;
+  }
+
+  .ticket-description {
+    max-width: 150px;
+  }
+
+  .table-modern {
+    font-size: 0.85rem;
+  }
+
+  .table-modern th,
+  .table-modern td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .results-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pagination-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pagination-nav {
+    order: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .pagination-info {
+    order: 2;
+    text-align: center;
+  }
+
+  .items-per-page {
+    order: 3;
+    justify-content: center;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+  }
+
+  .filter-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .table-responsive {
+    overflow-x: scroll;
+  }
+
+  .table-modern {
+    min-width: 1000px;
+  }
+
+  .pagination .page-link {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.85rem;
+    min-width: 32px;
+  }
+}

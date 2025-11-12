@@ -10,3 +10,144 @@
   background-color: #0884c0 !important;
   border: none !important;
 }
+
+/* ============================================
+   CLASSES UTILITÁRIAS ADICIONAIS
+   ============================================ */
+
+/* Text Colors */
+.text-info {
+  color: #06b6d4 !important;
+}
+
+.text-purple {
+  color: #8b5cf6 !important;
+}
+
+/* Background Colors */
+.bg-info {
+  background: linear-gradient(135deg, #06b6d4, #0891b2) !important;
+}
+
+.bg-purple {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+}
+
+/* Math Global */
+.Math {
+  /* Para compatibilidade com o template */
+}
+
+/* ============================================
+   STATUS BADGE (CONTINUAÇÃO)
+   ============================================ */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.status-active {
+  background: var(--success-light);
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
+}
+
+.status-inactive {
+  background: var(--danger-light);
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+}
+
+/* ============================================
+   ANIMAÇÕES ADICIONAIS
+   ============================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fa-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ============================================
+   SCROLLBAR CUSTOMIZADA
+   ============================================ */
+.table-responsive::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}
+
+/* ============================================
+   TOOLTIPS (OPCIONAL)
+   ============================================ */
+[title] {
+  position: relative;
+  cursor: help;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .page-header,
+  .filter-card,
+  .btn,
+  .pagination-wrapper {
+    display: none !important;
+  }
+
+  .table-card {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+  }
+
+  .table-modern {
+    font-size: 10pt;
+  }
+
+  .badge,
+  .badge-status,
+  .badge-priority {
+    border: 1px solid #000;
+  }
+}

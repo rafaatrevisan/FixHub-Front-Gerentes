@@ -1,0 +1,311 @@
+<!-- Cabeçalho da Página -->
+<div class="page-header">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+      <div>
+        <h1 class="page-title">
+          <i class="fa fa-chart-line me-3"></i>
+          Dashboard Administrativo
+        </h1>
+        <p class="page-subtitle">Visão geral e métricas de desempenho do FixHub</p>
+      </div>
+      <button class="btn btn-primary btn-refresh" (click)="atualizarDashboard()">
+        <i class="fa fa-sync-alt me-2"></i>
+        Atualizar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Conteúdo Principal -->
+<div class="container main-container">
+
+  <!-- ========== CARDS DE RESUMO ========== -->
+  <div class="row g-4 mb-4">
+    
+    <!-- Total de Tickets -->
+    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-12">
+      <div class="stat-card stat-card-primary">
+        <div class="stat-icon">
+          <i class="fa fa-ticket-alt"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ resumo.totalTickets }}</h3>
+          <p class="stat-label">Total de Tickets</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tickets Abertos -->
+    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-12">
+      <div class="stat-card stat-card-danger">
+        <div class="stat-icon">
+          <i class="fa fa-folder-open"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ resumo.ticketsAbertos }}</h3>
+          <p class="stat-label">Abertos</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tickets Em Andamento -->
+    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-12">
+      <div class="stat-card stat-card-warning">
+        <div class="stat-icon">
+          <i class="fa fa-spinner"></i>
+        </div>
+        <div class="stat-content">
+                    <h3 class="stat-value">{{ resumo.ticketsEmAndamento }}</h3>
+          <p class="stat-label">Em Andamento</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tickets Resolvidos -->
+    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-12">
+      <div class="stat-card stat-card-success">
+        <div class="stat-icon">
+          <i class="fa fa-check-circle"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ resumo.ticketsResolvidos }}</h3>
+          <p class="stat-label">Resolvidos</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tempo Médio de Resolução -->
+    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-12">
+      <div class="stat-card stat-card-info">
+        <div class="stat-icon">
+          <i class="fa fa-clock"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ formatarTempo(resumo.tempoMedioResolucao) }}</h3>
+          <p class="stat-label">Tempo Médio</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Percentual de SLA -->
+    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-12">
+      <div class="stat-card stat-card-purple">
+        <div class="stat-icon">
+          <i class="fa fa-chart-pie"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value" [ngClass]="getClasseSLA()">{{ resumo.percentualSLA }}%</h3>
+          <p class="stat-label">SLA Cumprido</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== GRÁFICOS ========== -->
+  <div class="row g-4 mb-4">
+    
+    <!-- Gráfico: Tickets por Status -->
+    <div class="col-lg-4 col-md-12">
+      <div class="chart-card">
+        <div class="chart-header">
+          <i class="fa fa-chart-bar me-2"></i>
+          <span>Tickets por Status</span>
+        </div>
+        <div class="chart-body">
+          <div *ngIf="carregandoGraficos" class="loading-spinner">
+            <i class="fa fa-spinner fa-spin"></i>
+            <p>Carregando...</p>
+          </div>
+          <div *ngIf="!carregandoGraficos && !erroGraficos" class="chart-list">
+            <div *ngFor="let item of ticketsPorStatus" class="chart-item">
+              <div class="chart-item-label">
+                <span class="badge-status" [ngClass]="'badge-' + item.categoria.toLowerCase()">
+                  {{ item.categoria }}
+                </span>
+              </div>
+              <div class="chart-item-bar">
+                <div class="progress">
+                  <div class="progress-bar" 
+                       [style.width.%]="(item.quantidade / resumo.totalTickets) * 100"
+                       [ngClass]="'bg-' + item.categoria.toLowerCase()">
+                  </div>
+                </div>
+              </div>
+              <div class="chart-item-value">
+                <strong>{{ item.quantidade }}</strong>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="erroGraficos" class="error-message">
+            <i class="fa fa-exclamation-triangle"></i>
+            <p>Erro ao carregar dados</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico: Tickets por Prioridade -->
+    <div class="col-lg-4 col-md-12">
+      <div class="chart-card">
+        <div class="chart-header">
+          <i class="fa fa-exclamation-circle me-2"></i>
+          <span>Tickets por Prioridade</span>
+        </div>
+        <div class="chart-body">
+          <div *ngIf="carregandoGraficos" class="loading-spinner">
+            <i class="fa fa-spinner fa-spin"></i>
+            <p>Carregando...</p>
+          </div>
+          <div *ngIf="!carregandoGraficos && !erroGraficos" class="chart-list">
+            <div *ngFor="let item of ticketsPorPrioridade" class="chart-item">
+              <div class="chart-item-label">
+                <span class="badge-priority" [ngClass]="'priority-' + item.categoria.toLowerCase()">
+                  {{ item.categoria }}
+                </span>
+              </div>
+              <div class="chart-item-bar">
+                <div class="progress">
+                  <div class="progress-bar" 
+                       [style.width.%]="(item.quantidade / resumo.totalTickets) * 100"
+                       [ngClass]="'bg-priority-' + item.categoria.toLowerCase()">
+                  </div>
+                </div>
+              </div>
+              <div class="chart-item-value">
+                <strong>{{ item.quantidade }}</strong>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="erroGraficos" class="error-message">
+            <i class="fa fa-exclamation-triangle"></i>
+            <p>Erro ao carregar dados</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico: Tickets por Equipe -->
+    <div class="col-lg-4 col-md-12">
+      <div class="chart-card">
+        <div class="chart-header">
+          <i class="fa fa-users me-2"></i>
+          <span>Tickets por Equipe</span>
+        </div>
+        <div class="chart-body">
+          <div *ngIf="carregandoGraficos" class="loading-spinner">
+            <i class="fa fa-spinner fa-spin"></i>
+            <p>Carregando...</p>
+          </div>
+          <div *ngIf="!carregandoGraficos && !erroGraficos" class="chart-list">
+            <div *ngFor="let item of ticketsPorEquipe" class="chart-item">
+              <div class="chart-item-label">
+                <span class="badge badge-secondary">{{ item.categoria }}</span>
+              </div>
+              <div class="chart-item-bar">
+                <div class="progress">
+                  <div class="progress-bar bg-info" 
+                       [style.width.%]="(item.quantidade / resumo.totalTickets) * 100">
+                  </div>
+                </div>
+              </div>
+              <div class="chart-item-value">
+                <strong>{{ item.quantidade }}</strong>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="erroGraficos" class="error-message">
+            <i class="fa fa-exclamation-triangle"></i>
+            <p>Erro ao carregar dados</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== TABELA DE DESEMPENHO ========== -->
+  <div class="table-card">
+    <div class="table-header">
+      <i class="fa fa-trophy me-2"></i>
+      <span>Desempenho dos Funcionários</span>
+      <span class="badge bg-primary ms-2">{{ desempenhoFuncionarios?.length || 0 }}</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-modern">
+        <thead>
+          <tr>
+            <th><i class="fa fa-user me-2"></i>Funcionário</th>
+            <th><i class="fa fa-briefcase me-2"></i>Cargo</th>
+            <th class="text-center"><i class="fa fa-check-circle me-2"></i>Resolvidos</th>
+            <th class="text-center"><i class="fa fa-clock me-2"></i>Tempo Médio</th>
+            <th class="text-center"><i class="fa fa-spinner me-2"></i>Em Andamento</th>
+            <th class="text-center"><i class="fa fa-star me-2"></i>Avaliação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="carregandoDesempenho">
+            <td colspan="6" class="text-center">
+              <div class="loading-spinner-inline">
+                <i class="fa fa-spinner fa-spin me-2"></i>
+                Carregando dados...
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="!carregandoDesempenho && erroDesempenho">
+            <td colspan="6" class="text-center">
+              <div class="error-message-inline">
+                <i class="fa fa-exclamation-triangle me-2"></i>
+                Erro ao carregar desempenho dos funcionários
+              </div>
+            </td>
+          </tr>
+          <tr *ngFor="let funcionario of desempenhoFuncionarios; let i = index" 
+              [class.top-performer]="i < 3">
+            <td>
+              <div class="user-info">
+                <span *ngIf="i === 0" class="medal gold">🥇</span>
+                <span *ngIf="i === 1" class="medal silver">🥈</span>
+                <span *ngIf="i === 2" class="medal bronze">🥉</span>
+                <strong>{{ funcionario.nome }}</strong>
+              </div>
+            </td>
+            <td>
+              <span class="badge badge-secondary">{{ funcionario.cargo }}</span>
+            </td>
+            <td class="text-center">
+              <span class="badge badge-success">{{ funcionario.totalTicketsResolvidos }}</span>
+            </td>
+            <td class="text-center">
+              <span class="time-badge">{{ formatarTempo(funcionario.tempoMedioResolucao) }}</span>
+            </td>
+            <td class="text-center">
+              <span class="badge badge-warning">{{ funcionario.ticketsEmAndamento || 0 }}</span>
+            </td>
+            <td class="text-center">
+              <div class="rating">
+                <i class="fa fa-star" [class.active]="funcionario.avaliacaoMedia >= 1"></i>
+                <i class="fa fa-star" [class.active]="funcionario.avaliacaoMedia >= 2"></i>
+                <i class="fa fa-star" [class.active]="funcionario.avaliacaoMedia >= 3"></i>
+                <i class="fa fa-star" [class.active]="funcionario.avaliacaoMedia >= 4"></i>
+                <i class="fa fa-star" [class.active]="funcionario.avaliacaoMedia >= 5"></i>
+                <span class="rating-value">({{ funcionario.avaliacaoMedia || 0 }})</span>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="!carregandoDesempenho && !erroDesempenho && desempenhoFuncionarios.length === 0">
+            <td colspan="6" class="text-center">
+              <div class="empty-state">
+                <i class="fa fa-inbox"></i>
+                <p>Nenhum dado de desempenho disponível</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
