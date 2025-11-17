@@ -1,17 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DashboardResumoDTO } from '../models/dashboard-resumo.model';
 import { GraficoTicketsDTO } from '../models/grafico-tickets.model';
 import { DesempenhoFuncionarioDTO } from '../models/desempenho-funcionario.model';
+import { environment } from '../../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
-  private baseUrl = 'https://projeto-integrador-fixhub.onrender.com/api/fixhub/admin/dashboard';
+  private baseUrl = `${environment.apiUrl}/api/fixhub/admin/dashboard`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Cabeçalho com token JWT de autenticação
+   */
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
 
   /**
    * Cria os parâmetros de data para as requisições
@@ -20,11 +31,16 @@ export class DashboardService {
     let params = new HttpParams();
 
     if (dataInicio) {
-      params = params.set('dataInicio', dataInicio.toISOString());
+      const dataInicioISO = dataInicio.toISOString();
+      params = params.set('dataInicio', dataInicioISO);
     }
 
     if (dataFim) {
-      params = params.set('dataFim', dataFim.toISOString());
+      // Adiciona 23:59:59 para pegar todo o dia
+      const dataFimAjustada = new Date(dataFim);
+      dataFimAjustada.setHours(23, 59, 59, 999);
+      const dataFimISO = dataFimAjustada.toISOString();
+      params = params.set('dataFim', dataFimISO);
     }
 
     return params;
@@ -35,7 +51,10 @@ export class DashboardService {
    */
   getResumo(dataInicio?: Date, dataFim?: Date): Observable<DashboardResumoDTO> {
     const params = this.criarParametrosData(dataInicio, dataFim);
-    return this.http.get<DashboardResumoDTO>(`${this.baseUrl}/resumo`, { params });
+    return this.http.get<DashboardResumoDTO>(`${this.baseUrl}/resumo`, {
+      params,
+      headers: this.getAuthHeaders()
+    });
   }
 
   /**
@@ -43,7 +62,10 @@ export class DashboardService {
    */
   getTicketsPorStatus(dataInicio?: Date, dataFim?: Date): Observable<GraficoTicketsDTO[]> {
     const params = this.criarParametrosData(dataInicio, dataFim);
-    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/status`, { params });
+    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/status`, {
+      params,
+      headers: this.getAuthHeaders()
+    });
   }
 
   /**
@@ -51,7 +73,10 @@ export class DashboardService {
    */
   getTicketsPorPrioridade(dataInicio?: Date, dataFim?: Date): Observable<GraficoTicketsDTO[]> {
     const params = this.criarParametrosData(dataInicio, dataFim);
-    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/prioridade`, { params });
+    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/prioridade`, {
+      params,
+      headers: this.getAuthHeaders()
+    });
   }
 
   /**
@@ -59,7 +84,10 @@ export class DashboardService {
    */
   getTicketsPorEquipe(dataInicio?: Date, dataFim?: Date): Observable<GraficoTicketsDTO[]> {
     const params = this.criarParametrosData(dataInicio, dataFim);
-    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/equipe`, { params });
+    return this.http.get<GraficoTicketsDTO[]>(`${this.baseUrl}/tickets/equipe`, {
+      params,
+      headers: this.getAuthHeaders()
+    });
   }
 
   /**
@@ -67,6 +95,9 @@ export class DashboardService {
    */
   getDesempenhoFuncionarios(dataInicio?: Date, dataFim?: Date): Observable<DesempenhoFuncionarioDTO[]> {
     const params = this.criarParametrosData(dataInicio, dataFim);
-    return this.http.get<DesempenhoFuncionarioDTO[]>(`${this.baseUrl}/funcionarios/desempenho`, { params });
+    return this.http.get<DesempenhoFuncionarioDTO[]>(`${this.baseUrl}/funcionarios/desempenho`, {
+      params,
+      headers: this.getAuthHeaders()
+    });
   }
 }
