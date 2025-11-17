@@ -449,3 +449,67 @@ body {
   color: #374151;
   font-size: 0.875rem;
 }
+
+/* ============================================
+   CHECKBOX GROUP
+   ============================================ */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+  max-height: 200px;
+  overflow-y: auto;
+}
+.form-check {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.form-check-input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  border: 2px solid var(--gray-400);
+  border-radius: 4px;
+  transition: var(--transition);
+}
+.form-check-input:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.form-check-input:hover {
+  border-color: var(--primary-color);
+}
+.form-check-label {
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.9rem;
+  color: var(--gray-700);
+  margin: 0;
+}
+.form-check-label.fw-bold {
+  font-weight: 700;
+  color: var(--gray-800);
+}
+/* Scrollbar customizada para checkbox-group */
+.checkbox-group::-webkit-scrollbar {
+  width: 6px;
+}
+.checkbox-group::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: 10px;
+}
+.checkbox-group::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 10px;
+}
+.checkbox-group::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}

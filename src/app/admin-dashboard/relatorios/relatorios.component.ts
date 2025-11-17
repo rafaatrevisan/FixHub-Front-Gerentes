@@ -14,31 +14,44 @@ import { FormsModule } from '@angular/forms';
 export class RelatoriosComponent implements OnInit {
   Math = Math;
 
-  // Lista de 
-  
   tickets: RelatorioTicketsDTO[] = [];
 
-  // Filtros
+  // Filtros (ARRAYS para múltipla seleção)
   filtros: FiltrosRelatorio = {
     dataInicio: '',
     dataFim: '',
-    status: '',
-    prioridade: '',
-    equipe: '',
+    status: [],         // ALTERADO: string → string[]
+    prioridade: [],     // ALTERADO: string → string[]
+    equipe: [],         // ALTERADO: string → string[]
     funcionario: ''
   };
 
-  // Opções para os selects
-  statusOptions = ['PENDENTE', 'EM_ANDAMENTO', 'CONCLUIDO', 'REPROVADO'];
-  prioridadeOptions = ['BAIXA', 'REGULAR', 'IMPORTANTE', 'URGENTE'];
-  equipeOptions = ['MANUTENCAO', 'LIMPEZA'];
+  // Opções para os checkboxes
+  statusOptions = [
+    { value: 'PENDENTE', label: 'Pendente' },
+    { value: 'EM_ANDAMENTO', label: 'Em Andamento' },
+    { value: 'CONCLUIDO', label: 'Concluído' },
+    { value: 'REPROVADO', label: 'Reprovado' }
+  ];
+
+  prioridadeOptions = [
+    { value: 'BAIXA', label: 'Baixa' },
+    { value: 'REGULAR', label: 'Regular' },
+    { value: 'IMPORTANTE', label: 'Importante' },
+    { value: 'URGENTE', label: 'Urgente' }
+  ];
+
+  equipeOptions = [
+    { value: 'MANUTENCAO', label: 'Manutenção' },
+    { value: 'LIMPEZA', label: 'Limpeza' }
+  ];
 
   // Estados
   carregando = false;
   erro = false;
   mensagemErro = '';
 
-  // Paginação e ordenação
+  // Paginação
   paginaAtual = 1;
   itensPorPagina = 10;
   ticketsFiltrados: RelatorioTicketsDTO[] = [];
@@ -58,21 +71,60 @@ export class RelatoriosComponent implements OnInit {
     this.filtros.dataInicio = this.formatarData(umMesAtras);
   }
 
-  formatarData(data: Date): string {
+  formatarData( Date): string {
     const ano = data.getFullYear();
     const mes = String(data.getMonth() + 1).padStart(2, '0');
     const dia = String(data.getDate()).padStart(2, '0');
     return `${ano}-${mes}-${dia}`;
   }
 
+  /**
+   * Verifica se um valor está selecionado no filtro
+   */
+  isChecked(array: string[] | undefined, value: string): boolean {
+    return array ? array.includes(value) : false;
+  }
+
+  /**
+   * Toggle de seleção (adiciona ou remove do array)
+   */
+  toggleSelection(array: string[], value: string): void {
+    const index = array.indexOf(value);
+    if (index > -1) {
+      array.splice(index, 1); // Remove
+    } else {
+      array.push(value); // Adiciona
+    }
+  }
+
+  /**
+   * Seleciona ou desmarca todos os itens
+   */
+  toggleAll(array: string[], options: any[], checked: boolean): void {
+    if (checked) {
+      array.splice(0, array.length, ...options.map(o => o.value));
+    } else {
+      array.splice(0, array.length);
+    }
+  }
+
+  /**
+   * Verifica se todos estão selecionados
+   */
+  allChecked(array: string[] | undefined, options: any[]): boolean {
+    return array ? array.length === options.length : false;
+  }
+
   buscarRelatorio(): void {
     this.carregando = true;
     this.erro = false;
     this.mensagemErro = '';
+
     this.relatoriosService.getRelatorioTickets(this.filtros).subscribe({
       next: (data: RelatorioTicketsDTO[]) => {
         this.tickets = data || [];
         this.ticketsFiltrados = data || [];
+        this.paginaAtual = 1; // Reseta para primeira página
         this.carregando = false;
       },
       error: (error: any) => {
@@ -88,9 +140,9 @@ export class RelatoriosComponent implements OnInit {
     this.filtros = {
       dataInicio: '',
       dataFim: '',
-      status: '',
-      prioridade: '',
-      equipe: '',
+      status: [],
+      prioridade: [],
+      equipe: [],
       funcionario: ''
     };
     this.definirDatasIniciais();
@@ -116,7 +168,7 @@ export class RelatoriosComponent implements OnInit {
     });
   }
 
-  formatarDataExibicao(data: string | Date | null | undefined): string {
+  formatarDataExibicao( string | Date | null | undefined): string {
     if (!data) return '-';
     const d = new Date(data as any);
     if (isNaN(d.getTime())) return '-';
@@ -124,34 +176,34 @@ export class RelatoriosComponent implements OnInit {
   }
 
   getClasseStatus(status: string): string {
-  switch (status?.toUpperCase()) {
-    case 'CONCLUIDO':
-      return 'status-concluido';
-    case 'PENDENTE':
-      return 'status-pendente';
-    case 'EM_ANDAMENTO':
-      return 'status-em_andamento';
-    case 'REPROVADO':
-      return 'status-reprovado';
-    default:
-      return 'status-default';
+    switch (status?.toUpperCase()) {
+      case 'CONCLUIDO':
+        return 'status-concluido';
+      case 'PENDENTE':
+        return 'status-pendente';
+      case 'EM_ANDAMENTO':
+        return 'status-em_andamento';
+      case 'REPROVADO':
+        return 'status-reprovado';
+      default:
+        return 'status-default';
+    }
   }
-}
 
-getClassePrioridade(prioridade: string): string {
-  switch (prioridade?.toUpperCase()) {
-    case 'BAIXA':
-      return 'priority-baixa';
-    case 'REGULAR':
-      return 'priority-regular';
-    case 'IMPORTANTE':
-      return 'priority-importante';
-    case 'URGENTE':
-      return 'priority-urgente';
-    default:
-      return 'priority-default';
+  getClassePrioridade(prioridade: string): string {
+    switch (prioridade?.toUpperCase()) {
+      case 'BAIXA':
+        return 'priority-baixa';
+      case 'REGULAR':
+        return 'priority-regular';
+      case 'IMPORTANTE':
+        return 'priority-importante';
+      case 'URGENTE':
+        return 'priority-urgente';
+      default:
+        return 'priority-default';
+    }
   }
-}
 
   formatarTempo(minutos: number | null | undefined): string {
     if (minutos == null || minutos === 0) return '-';

@@ -7,9 +7,9 @@ import { environment } from '../../environment';
 export interface FiltrosRelatorio {
   dataInicio?: string;
   dataFim?: string;
-  status?: string;
-  prioridade?: string;
-  equipe?: string;
+  status?: string[];       // ALTERADO: string → string[]
+  prioridade?: string[];   // ALTERADO: string → string[]
+  equipe?: string[];       // ALTERADO: string → string[]
   funcionario?: string;
 }
 
@@ -47,6 +47,15 @@ export class RelatoriosService {
     return formatado;
   }
 
+  /**
+   * Converte array para string separada por vírgulas
+   * ["PENDENTE", "EM_ANDAMENTO"] → "PENDENTE,EM_ANDAMENTO"
+   */
+  private converterArrayParaString(array?: string[]): string {
+    if (!array || array.length === 0) return '';
+    return array.join(',');
+  }
+
   /** Obtém relatório detalhado de tickets com filtros */
   getRelatorioTickets(filtros: FiltrosRelatorio): Observable<RelatorioTicketsDTO[]> {
     let params = new HttpParams();
@@ -54,10 +63,20 @@ export class RelatoriosService {
 
     if (datas.dataInicio) params = params.set('dataInicio', datas.dataInicio);
     if (datas.dataFim) params = params.set('dataFim', datas.dataFim);
-    if (filtros.status) params = params.set('status', filtros.status);
-    if (filtros.prioridade) params = params.set('prioridade', filtros.prioridade);
-    if (filtros.equipe) params = params.set('equipe', filtros.equipe);
-    if (filtros.funcionario) params = params.set('funcionario', filtros.funcionario);
+    
+    // Converte arrays para strings separadas por vírgula
+    if (filtros.status && filtros.status.length > 0) {
+      params = params.set('status', this.converterArrayParaString(filtros.status));
+    }
+    if (filtros.prioridade && filtros.prioridade.length > 0) {
+      params = params.set('prioridade', this.converterArrayParaString(filtros.prioridade));
+    }
+    if (filtros.equipe && filtros.equipe.length > 0) {
+      params = params.set('equipe', this.converterArrayParaString(filtros.equipe));
+    }
+    if (filtros.funcionario) {
+      params = params.set('funcionario', filtros.funcionario);
+    }
 
     return this.http.get<RelatorioTicketsDTO[]>(`${this.baseUrl}/tickets`, {
       params,
@@ -72,10 +91,19 @@ export class RelatoriosService {
 
     if (datas.dataInicio) params = params.set('dataInicio', datas.dataInicio);
     if (datas.dataFim) params = params.set('dataFim', datas.dataFim);
-    if (filtros.status) params = params.set('status', filtros.status);
-    if (filtros.prioridade) params = params.set('prioridade', filtros.prioridade);
-    if (filtros.equipe) params = params.set('equipe', filtros.equipe);
-    if (filtros.funcionario) params = params.set('funcionario', filtros.funcionario);
+    
+    if (filtros.status && filtros.status.length > 0) {
+      params = params.set('status', this.converterArrayParaString(filtros.status));
+    }
+    if (filtros.prioridade && filtros.prioridade.length > 0) {
+      params = params.set('prioridade', this.converterArrayParaString(filtros.prioridade));
+    }
+    if (filtros.equipe && filtros.equipe.length > 0) {
+      params = params.set('equipe', this.converterArrayParaString(filtros.equipe));
+    }
+    if (filtros.funcionario) {
+      params = params.set('funcionario', filtros.funcionario);
+    }
 
     return this.http.get(`${this.baseUrl}/tickets/exportar/csv`, {
       params,
