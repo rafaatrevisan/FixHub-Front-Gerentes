@@ -4,17 +4,20 @@ import { DashboardResumoDTO } from '../models/dashboard-resumo.model';
 import { GraficoTicketsDTO } from '../models/grafico-tickets.model';
 import { DesempenhoFuncionarioDTO } from '../models/desempenho-funcionario.model';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  // Filtros de data
+  dataInicio: string = '';
+  dataFim: string = '';
+
   // Dados do Resumo
   resumo: DashboardResumoDTO = {
     totalTickets: 0,
@@ -46,37 +49,71 @@ export class DashboardComponent implements OnInit {
   constructor(private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
+    this.definirFiltroInicial();
     this.carregarDadosDashboard();
   }
 
   /**
-   * Tira acentos e converte tudo para minúsculo
+   * Define o filtro inicial como últimos 30 dias
+   */
+  definirFiltroInicial(): void {
+    const hoje = new Date();
+    const trintaDiasAtras = new Date();
+    trintaDiasAtras.setDate(hoje.getDate() - 30);
+
+    this.dataFim = this.formatarDataInput(hoje);
+    this.dataInicio = this.formatarDataInput(trintaDiasAtras);
+  }
+
+  /**
+   * Formata data para input type="date" (yyyy-MM-dd)
+   */
+  formatarDataInput(data: Date): string {
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const dia = String(data.getDate()).padStart(2, '0');
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  /**
+   * Converte string do input para Date
+   */
+  converterStringParaDate(dataString: string): Date | undefined {
+    if (!dataString) return undefined;
+    return new Date(dataString + 'T00:00:00');
+  }
+
+  /**
+   * Normaliza prioridade (remove acentos)
    */
   normalizarPrioridade(categoria: string): string {
-  if (!categoria) return 'desconhecida';
-  return categoria
-    .normalize('NFD')                
-    .replace(/[\u0300-\u036f]/g, '') 
-    .toLowerCase();                 
-}
+    if (!categoria) return 'desconhecida';
+    return categoria
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
 
   /**
    * Carrega todos os dados do dashboard
    */
   carregarDadosDashboard(): void {
-    this.carregarResumo();
-    this.carregarGraficos();
-    this.carregarDesempenhoFuncionarios();
+    const inicio = this.converterStringParaDate(this.dataInicio);
+    const fim = this.converterStringParaDate(this.dataFim);
+
+    this.carregarResumo(inicio, fim);
+    this.carregarGraficos(inicio, fim);
+    this.carregarDesempenhoFuncionarios(inicio, fim);
   }
 
   /**
    * Carrega o resumo geral
    */
-  carregarResumo(): void {
+  carregarResumo(dataInicio?: Date, dataFim?: Date): void {
     this.carregandoResumo = true;
     this.erroResumo = false;
 
-    this.dashboardService.getResumo().subscribe({
+    this.dashboardService.getResumo(dataInicio, dataFim).subscribe({
       next: (data) => {
         this.resumo = data ?? this.resumo;
         this.carregandoResumo = false;
@@ -92,12 +129,12 @@ export class DashboardComponent implements OnInit {
   /**
    * Carrega os dados dos gráficos
    */
-  carregarGraficos(): void {
+  carregarGraficos(dataInicio?: Date, dataFim?: Date): void {
     this.carregandoGraficos = true;
     this.erroGraficos = false;
 
     // Tickets por Status
-    this.dashboardService.getTicketsPorStatus().subscribe({
+    this.dashboardService.getTicketsPorStatus(dataInicio, dataFim).subscribe({
       next: (data) => {
         this.ticketsPorStatus = data ?? [];
       },
@@ -108,7 +145,7 @@ export class DashboardComponent implements OnInit {
     });
 
     // Tickets por Prioridade
-    this.dashboardService.getTicketsPorPrioridade().subscribe({
+    this.dashboardService.getTicketsPorPrioridade(dataInicio, dataFim).subscribe({
       next: (data) => {
         this.ticketsPorPrioridade = data ?? [];
       },
@@ -119,7 +156,7 @@ export class DashboardComponent implements OnInit {
     });
 
     // Tickets por Equipe
-    this.dashboardService.getTicketsPorEquipe().subscribe({
+    this.dashboardService.getTicketsPorEquipe(dataInicio, dataFim).subscribe({
       next: (data) => {
         this.ticketsPorEquipe = data ?? [];
         this.carregandoGraficos = false;
@@ -135,11 +172,11 @@ export class DashboardComponent implements OnInit {
   /**
    * Carrega o desempenho dos funcionários
    */
-  carregarDesempenhoFuncionarios(): void {
+  carregarDesempenhoFuncionarios(dataInicio?: Date, dataFim?: Date): void {
     this.carregandoDesempenho = true;
     this.erroDesempenho = false;
 
-    this.dashboardService.getDesempenhoFuncionarios().subscribe({
+    this.dashboardService.getDesempenhoFuncionarios(dataInicio, dataFim).subscribe({
       next: (data) => {
         this.desempenhoFuncionarios = data ?? [];
         this.carregandoDesempenho = false;
@@ -178,9 +215,17 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Atualiza os dados do dashboard
+   * Atualiza os dados do dashboard com os filtros aplicados
    */
   atualizarDashboard(): void {
+    this.carregarDadosDashboard();
+  }
+
+  /**
+   * Limpa os filtros e recarrega
+   */
+  limparFiltros(): void {
+    this.definirFiltroInicial();
     this.carregarDadosDashboard();
   }
 }
