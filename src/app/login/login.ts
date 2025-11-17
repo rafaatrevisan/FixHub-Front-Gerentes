@@ -30,6 +30,9 @@ export class LoginComponent {
   this.http.post('https://projeto-integrador-fixhub.onrender.com/api/fixhub/admin/login', body, { headers }).subscribe(
     (response: any) => {
       localStorage.setItem('token', response.token);
+      localStorage.setItem('nome', response.nome);
+      localStorage.setItem('email', response.email);
+      localStorage.setItem('cargo', response.cargo);
       this.router.navigate(['/home']);
     },
     (error) => {
