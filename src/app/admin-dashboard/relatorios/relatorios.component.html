@@ -50,113 +50,124 @@
             <input type="date" class="form-control" [(ngModel)]="filtros.dataFim" name="dataFim">
           </div>
 
-          <!-- Status (MÚLTIPLO COM CHECKBOXES) -->
-          <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="col-lg-2 col-md-6 col-sm-12">
             <label class="form-label">
               <i class="fa fa-info-circle me-1"></i>
               Status
             </label>
-            <div class="checkbox-group">
-              <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  [checked]="allChecked(filtros.status, statusOptions)"
-                  (change)="toggleAll(filtros.status!, statusOptions, $any($event.target).checked)"
-                  id="statusTodos">
-                <label class="form-check-label fw-bold" for="statusTodos">
-                  Todos
-                </label>
-              </div>
-              <div class="form-check" *ngFor="let status of statusOptions">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  [checked]="isChecked(filtros.status, status.value)"
-                  (change)="toggleSelection(filtros.status!, status.value)"
-                  [id]="'status' + status.value">
-                <label class="form-check-label" [for]="'status' + status.value">
-                  {{ status.label }}
-                </label>
+
+            <div class="multi-dropdown">
+              <!-- Botão que simula um select -->
+              <button type="button" class="form-select text-start" (click)="toggleDropdown('status')"
+                [class.active]="dropdownAberto === 'status'">
+                <span>{{ getTextoSelecionado(filtros.status, statusOptions, 'Status') }}</span>
+                <i class="fa fa-chevron-down dropdown-icon" [class.rotate]="dropdownAberto === 'status'"></i>
+              </button>
+
+              <!-- Menu dropdown com checkboxes -->
+              <div class="dropdown-menu-checks" [class.show]="dropdownAberto === 'status'">
+
+                <!-- Opção "Todos" -->
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" [checked]="allChecked(filtros.status, statusOptions)"
+                    (change)="toggleAll(filtros.status!, statusOptions, $any($event.target).checked)" id="statusTodos">
+                  <label class="form-check-label fw-bold" for="statusTodos">
+                    Todos
+                  </label>
+                </div>
+
+
+                <!-- Opções individuais -->
+                <div class="form-check" *ngFor="let status of statusOptions">
+                  <input class="form-check-input" type="checkbox" [checked]="isChecked(filtros.status, status.value)"
+                    (change)="toggleSelection(filtros.status!, status.value)" [id]="'status' + status.value">
+                  <label class="form-check-label" [for]="'status' + status.value">
+                    {{ status.label }}
+                  </label>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Prioridade (MÚLTIPLO COM CHECKBOXES) -->
           <div class="col-lg-2 col-md-6 col-sm-12">
             <label class="form-label">
               <i class="fa fa-exclamation-circle me-1"></i>
               Prioridade
             </label>
-            <div class="checkbox-group">
-              <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  [checked]="allChecked(filtros.prioridade, prioridadeOptions)"
-                  (change)="toggleAll(filtros.prioridade!, prioridadeOptions, $any($event.target).checked)"
-                  id="prioridadeTodos">
-                <label class="form-check-label fw-bold" for="prioridadeTodos">
-                  Todas
-                </label>
-              </div>
-              <div class="form-check" *ngFor="let prioridade of prioridadeOptions">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  [checked]="isChecked(filtros.prioridade, prioridade.value)"
-                  (change)="toggleSelection(filtros.prioridade!, prioridade.value)"
-                  [id]="'prioridade' + prioridade.value">
-                <label class="form-check-label" [for]="'prioridade' + prioridade.value">
-                  {{ prioridade.label }}
-                </label>
+
+            <div class="multi-dropdown">
+              <button type="button" class="form-select text-start" (click)="toggleDropdown('prioridade')"
+                [class.active]="dropdownAberto === 'prioridade'">
+                <span>{{ getTextoSelecionado(filtros.prioridade, prioridadeOptions, 'Prioridade') }}</span>
+                <i class="fa fa-chevron-down dropdown-icon" [class.rotate]="dropdownAberto === 'prioridade'"></i>
+              </button>
+
+              <div class="dropdown-menu-checks" [class.show]="dropdownAberto === 'prioridade'">
+
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox"
+                    [checked]="allChecked(filtros.prioridade, prioridadeOptions)"
+                    (change)="toggleAll(filtros.prioridade!, prioridadeOptions, $any($event.target).checked)"
+                    id="prioridadeTodos">
+                  <label class="form-check-label fw-bold" for="prioridadeTodos">
+                    Todas
+                  </label>
+                </div>
+
+                <div class="form-check" *ngFor="let prioridade of prioridadeOptions">
+                  <input class="form-check-input" type="checkbox"
+                    [checked]="isChecked(filtros.prioridade, prioridade.value)"
+                    (change)="toggleSelection(filtros.prioridade!, prioridade.value)"
+                    [id]="'prioridade' + prioridade.value">
+                  <label class="form-check-label" [for]="'prioridade' + prioridade.value">
+                    {{ prioridade.label }}
+                  </label>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Equipe (MÚLTIPLO COM CHECKBOXES) -->
           <div class="col-lg-2 col-md-6 col-sm-12">
             <label class="form-label">
               <i class="fa fa-users me-1"></i>
               Equipe
             </label>
-            <div class="checkbox-group">
-              <div class="form-check">
-                                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  [checked]="allChecked(filtros.equipe, equipeOptions)"
-                  (change)="toggleAll(filtros.equipe!, equipeOptions, $any($event.target).checked)"
-                  id="equipeTodos">
-                <label class="form-check-label fw-bold" for="equipeTodos">
-                  Todas
-                </label>
-              </div>
-              <div class="form-check" *ngFor="let equipe of equipeOptions">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  [checked]="isChecked(filtros.equipe, equipe.value)"
-                  (change)="toggleSelection(filtros.equipe!, equipe.value)"
-                  [id]="'equipe' + equipe.value">
-                <label class="form-check-label" [for]="'equipe' + equipe.value">
-                  {{ equipe.label }}
-                </label>
+
+            <div class="multi-dropdown">
+              <button type="button" class="form-select text-start" (click)="toggleDropdown('equipe')"
+                [class.active]="dropdownAberto === 'equipe'">
+                <span>{{ getTextoSelecionado(filtros.equipe, equipeOptions, 'Equipe') }}</span>
+                <i class="fa fa-chevron-down dropdown-icon" [class.rotate]="dropdownAberto === 'equipe'"></i>
+              </button>
+
+              <div class="dropdown-menu-checks" [class.show]="dropdownAberto === 'equipe'">
+
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" [checked]="allChecked(filtros.equipe, equipeOptions)"
+                    (change)="toggleAll(filtros.equipe!, equipeOptions, $any($event.target).checked)" id="equipeTodos">
+                  <label class="form-check-label fw-bold" for="equipeTodos">
+                    Todas
+                  </label>
+                </div>
+
+                <div class="form-check" *ngFor="let equipe of equipeOptions">
+                  <input class="form-check-input" type="checkbox" [checked]="isChecked(filtros.equipe, equipe.value)"
+                    (change)="toggleSelection(filtros.equipe!, equipe.value)" [id]="'equipe' + equipe.value">
+                  <label class="form-check-label" [for]="'equipe' + equipe.value">
+                    {{ equipe.label }}
+                  </label>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Funcionário -->
-          <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="col-lg-2 col-md-6 col-sm-12">
             <label class="form-label">
               <i class="fa fa-user me-1"></i>
               Funcionário
             </label>
-            <input 
-              type="text" 
-              class="form-control" 
-              [(ngModel)]="filtros.funcionario" 
-              name="funcionario"
+            <input type="text" class="form-control" [(ngModel)]="filtros.funcionario" name="funcionario"
               placeholder="Digite o nome do funcionário">
           </div>
 

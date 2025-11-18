@@ -16,47 +16,48 @@
 <!-- Conteúdo Principal -->
 <div class="container main-container">
 
-  <!-- ========== FILTRO DE DATA ========== -->
-  <div class="filter-section mb-4">
-    <div class="filter-card-compact">
-      <div class="filter-content">
-        <div class="filter-icon">
-          <i class="fa fa-calendar-alt"></i>
-        </div>
-        <div class="filter-inputs">
-          <div class="input-group-compact">
-            <label class="form-label-compact">
-              <i class="fa fa-calendar-day me-1"></i>
-              Data Início
-            </label>
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="dataInicio" name="dataInicio">
-          </div>
-          <div class="input-group-compact">
-            <label class="form-label-compact">
-              <i class="fa fa-calendar-day me-1"></i>
-              Data Fim
-            </label>
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="dataFim" name="dataFim">
-          </div>
-        </div>
-        <div class="filter-actions">
-          <button class="btn btn-primary btn-sm" (click)="atualizarDashboard()">
-            <i class="fa fa-search me-1"></i>
-            Filtrar
-          </button>
-          <button class="btn btn-secondary btn-sm" (click)="limparFiltros()">
-            <i class="fa fa-redo me-1"></i>
-            Últimos 30 dias
-          </button>
-        </div>
+  <div class="container mb-4">
+    <div class="row g-3 align-items-end">
+
+      <!-- Data Início -->
+      <div class="col-md-2 col-sm-6">
+        <label class="form-label">
+          <i class="fa fa-calendar-day me-1"></i> Data Início
+        </label>
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="dataInicio">
       </div>
+
+      <!-- Data Fim -->
+      <div class="col-md-2 col-sm-6">
+        <label class="form-label">
+          <i class="fa fa-calendar-day me-1"></i> Data Fim
+        </label>
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="dataFim">
+      </div>
+
+      <!-- Botão Filtrar -->
+      <div class="col-md-2 col-sm-4">
+        <button class="btn btn-primary w-100 btn-sm" (click)="atualizarDashboard()">
+          <i class="fa fa-search me-1"></i> Filtrar
+        </button>
+      </div>
+
+      <!-- Botão Últimos 30 dias -->
+      <div class="col-md-2 col-sm-4">
+        <button class="btn btn-secondary w-100 btn-sm" (click)="limparFiltros()">
+          <i class="fa fa-redo me-1"></i> Últimos 30 dias
+        </button>
+      </div>
+
+      <!-- Botão Atualizar -->
+      <div class="col-md-3 col-sm-4 ms-auto text-end">
+        <button class="btn btn-primary btn-sm" style="padding: 0.375rem 0.75rem;" (click)="atualizarDashboard()">
+          <i class="fa fa-sync-alt me-1"></i> Atualizar
+        </button>
+      </div>
+
     </div>
   </div>
-
-  <button class="btn btn-primary" (click)="atualizarDashboard()">
-    <i class="fa fa-sync-alt me-2"></i>
-    Atualizar
-  </button><br><br>
 
   <!-- ========== CARDS DE RESUMO ========== -->
   <div class="row g-4 mb-4">

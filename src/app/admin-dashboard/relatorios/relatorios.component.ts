@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { RelatoriosService, FiltrosRelatorio } from '../services/relatorios.service';
 import { RelatorioTicketsDTO } from '../models/relatorio-tickets.model';
 import { CommonModule } from '@angular/common';
@@ -56,7 +56,7 @@ export class RelatoriosComponent implements OnInit {
   itensPorPagina = 10;
   ticketsFiltrados: RelatorioTicketsDTO[] = [];
 
-  constructor(private relatoriosService: RelatoriosService) {}
+  constructor(private relatoriosService: RelatoriosService) { }
 
   ngOnInit(): void {
     this.definirDatasIniciais();
@@ -71,12 +71,13 @@ export class RelatoriosComponent implements OnInit {
     this.filtros.dataInicio = this.formatarData(umMesAtras);
   }
 
-  formatarData( Date): string {
+  formatarData(data: Date): string {
     const ano = data.getFullYear();
     const mes = String(data.getMonth() + 1).padStart(2, '0');
     const dia = String(data.getDate()).padStart(2, '0');
     return `${ano}-${mes}-${dia}`;
   }
+
 
   /**
    * Verifica se um valor está selecionado no filtro
@@ -168,12 +169,15 @@ export class RelatoriosComponent implements OnInit {
     });
   }
 
-  formatarDataExibicao( string | Date | null | undefined): string {
+  formatarDataExibicao(data: string | Date | null | undefined): string {
     if (!data) return '-';
-    const d = new Date(data as any);
+
+    const d = new Date(data);
     if (isNaN(d.getTime())) return '-';
+
     return d.toLocaleDateString('pt-BR');
   }
+
 
   getClasseStatus(status: string): string {
     switch (status?.toUpperCase()) {
@@ -244,4 +248,45 @@ export class RelatoriosComponent implements OnInit {
     for (let i = inicio; i <= fim; i++) paginas.push(i);
     return paginas;
   }
+
+  // Adicione estas propriedades na sua classe
+dropdownAberto: string | null = null;
+
+// Método para abrir/fechar dropdown
+toggleDropdown(campo: string) {
+  if (this.dropdownAberto === campo) {
+    this.dropdownAberto = null;
+  } else {
+    this.dropdownAberto = campo;
+  }
 }
+
+// Método para gerar texto do botão
+getTextoSelecionado(
+  arrayFiltro: string[] | undefined, 
+  opcoes: {value: string, label: string}[], 
+  placeholder: string
+): string {
+  if (!arrayFiltro || arrayFiltro.length === 0 || arrayFiltro.length === opcoes.length) {
+    return `Todos (${opcoes.length})`;
+  }
+  
+  if (arrayFiltro.length === 1) {
+    const opcao = opcoes.find(o => o.value === arrayFiltro[0]);
+    return opcao ? opcao.label : placeholder;
+  }
+  
+  return `${arrayFiltro.length} selecionados`;
+}
+
+// Fechar dropdown ao clicar fora (adicione no ngOnInit ou construtor)
+@HostListener('document:click', ['$event'])
+fecharDropdownExterno(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (!target.closest('.multi-dropdown')) {
+    this.dropdownAberto = null;
+  }
+}
+
+}
+

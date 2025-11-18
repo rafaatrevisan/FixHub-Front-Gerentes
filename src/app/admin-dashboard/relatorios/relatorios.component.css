@@ -240,6 +240,43 @@ body {
   gap: 1rem;
 }
 
+/* Botão ativo (página atual) */
+.pagination .page-item.active .page-link {
+  background-color: #0c9fe4;
+  border-color: #0c9fe4;
+  color: #fff;
+}
+
+/* Hover nos botões de página */
+.pagination .page-link:hover {
+  background-color: #0884c0;
+  border-color: #0884c0;
+  color: #fff;
+}
+
+/* Setas de navegação */
+.pagination .page-link {
+  color: #0c9fe4;
+}
+
+/* Setas em hover */
+.pagination .page-link:hover i {
+  color: #fff;
+}
+
+/* Focus nos botões */
+.pagination .page-link:focus {
+  box-shadow: 0 0 0 0.25rem rgba(12, 159, 228, 0.25);
+  border-color: #0c9fe4;
+}
+
+/* Botões desabilitados (mantém cinza) */
+.pagination .page-item.disabled .page-link {
+  color: #6c757d;
+  background-color: #fff;
+  border-color: #dee2e6;
+}
+
 /* ============================================
    RESPONSIVIDADE
    ============================================ */
@@ -450,66 +487,127 @@ body {
   font-size: 0.875rem;
 }
 
-/* ============================================
-   CHECKBOX GROUP
-   ============================================ */
-.checkbox-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  background: var(--gray-50);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--gray-200);
-  max-height: 200px;
-  overflow-y: auto;
+.multi-dropdown {
+  position: relative;
+  width: 100%;
 }
-.form-check {
-  margin: 0;
-  padding: 0;
+
+/* Botão que simula select */
+.multi-dropdown .form-select {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: #fff;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  padding: 0.375rem 0.75rem;
+  transition: all 0.2s ease;
+  background-image: none !important; 
+}
+
+.multi-dropdown .form-select:hover {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+.multi-dropdown .form-select.active {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  outline: none;
+}
+
+.multi-dropdown .form-select:focus {
+  outline: none;
+}
+
+/* Ícone do dropdown */
+.dropdown-icon {
+  transition: transform 0.3s ease;
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.dropdown-icon.rotate {
+  transform: rotate(180deg);
+}
+
+/* Menu dropdown */
+.dropdown-menu-checks {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  padding: 8px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  max-height: 280px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: none;
+}
+
+.dropdown-menu-checks.show {
+  display: block;
+  animation: fadeInDown 0.2s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Divider - REMOVIDO */
+
+/* Checkboxes dentro do dropdown */
+.dropdown-menu-checks .form-check {
+  padding: 8px 12px;
+  margin-bottom: 2px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
 }
-.form-check-input {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  cursor: pointer;
-  border: 2px solid var(--gray-400);
-  border-radius: 4px;
-  transition: var(--transition);
+
+.dropdown-menu-checks .form-check:hover {
+  background-color: #f8f9fa;
 }
-.form-check-input:checked {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
+
+.dropdown-menu-checks .form-check-input {
+  display: none;
 }
-.form-check-input:hover {
-  border-color: var(--primary-color);
-}
-.form-check-label {
+
+.dropdown-menu-checks .form-check-label {
   cursor: pointer;
   user-select: none;
   font-size: 0.9rem;
-  color: var(--gray-700);
-  margin: 0;
+  margin-bottom: 0;
+  flex-grow: 1;
 }
-.form-check-label.fw-bold {
-  font-weight: 700;
-  color: var(--gray-800);
-}
-/* Scrollbar customizada para checkbox-group */
-.checkbox-group::-webkit-scrollbar {
+
+/* Scrollbar customizada */
+.dropdown-menu-checks::-webkit-scrollbar {
   width: 6px;
 }
-.checkbox-group::-webkit-scrollbar-track {
-  background: var(--gray-100);
+
+.dropdown-menu-checks::-webkit-scrollbar-track {
+  background: #f1f1f1;
   border-radius: 10px;
 }
-.checkbox-group::-webkit-scrollbar-thumb {
-  background: var(--gray-400);
+
+.dropdown-menu-checks::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
   border-radius: 10px;
 }
-.checkbox-group::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-500);
+
+.dropdown-menu-checks::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
