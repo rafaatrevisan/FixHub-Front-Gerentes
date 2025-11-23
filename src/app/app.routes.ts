@@ -29,10 +29,15 @@ export const routes: Routes = [
         path: 'funcionarios/cadastrar',
         loadComponent: () => import('./funcionarios/cadastrar-funcionario/cadastrar-funcionario').then(m => m.CadastrarFuncionarioComponent),
         canActivate: [AuthGuard]
-        },
+    },
     {
         path: 'usuarios',
         loadComponent: () => import('./usuarios/usuarios').then(m => m.UsuariosComponent),
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'admin',
+        loadChildren: () => import('./admin-dashboard/admin.module').then(m => m.AdminModule),
         canActivate: [AuthGuard]
     },
 ];

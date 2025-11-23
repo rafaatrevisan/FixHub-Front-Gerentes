@@ -1,0 +1,338 @@
+<!-- Cabeçalho da Página -->
+<div class="page-header mb-4">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+      <div>
+        <h1 class="page-title">
+          <i class="fa fa-file-alt me-3"></i>
+          Relatórios de Tickets
+        </h1>
+        <p class="page-subtitle">Consulte e exporte relatórios detalhados dos tickets</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Conteúdo Principal -->
+<div class="container main-container">
+
+  <button class="btn btn-success mb-3" (click)="exportarCSV()" [disabled]="carregando">
+    <i class="fa fa-file-excel me-2"></i>
+    Exportar CSV
+  </button>
+
+  <!-- ========== CARD DE FILTROS ========== -->
+  <form (ngSubmit)="buscarRelatorio()">
+    <div class="filter-card">
+      <div class="filter-header">
+        <i class="fa fa-filter me-2"></i>
+        <span>Filtros de Busca</span>
+      </div>
+
+      <div class="filter-body">
+        <div class="row g-3">
+
+          <!-- Data Início -->
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <label class="form-label">
+              <i class="fa fa-calendar me-1"></i>
+              Data Início
+            </label>
+            <input type="date" class="form-control" [(ngModel)]="filtros.dataInicio" name="dataInicio">
+          </div>
+
+          <!-- Data Fim -->
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <label class="form-label">
+              <i class="fa fa-calendar me-1"></i>
+              Data Fim
+            </label>
+            <input type="date" class="form-control" [(ngModel)]="filtros.dataFim" name="dataFim">
+          </div>
+
+          <div class="col-lg-2 col-md-6 col-sm-12">
+            <label class="form-label">
+              <i class="fa fa-info-circle me-1"></i>
+              Status
+            </label>
+
+            <div class="multi-dropdown">
+              <!-- Botão que simula um select -->
+              <button type="button" class="form-select text-start" (click)="toggleDropdown('status')"
+                [class.active]="dropdownAberto === 'status'">
+                <span>{{ getTextoSelecionado(filtros.status, statusOptions, 'Status') }}</span>
+                <i class="fa fa-chevron-down dropdown-icon" [class.rotate]="dropdownAberto === 'status'"></i>
+              </button>
+
+              <!-- Menu dropdown com checkboxes -->
+              <div class="dropdown-menu-checks" [class.show]="dropdownAberto === 'status'">
+
+                <!-- Opção "Todos" -->
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" [checked]="allChecked(filtros.status, statusOptions)"
+                    (change)="toggleAll(filtros.status!, statusOptions, $any($event.target).checked)" id="statusTodos">
+                  <label class="form-check-label fw-bold" for="statusTodos">
+                    Todos
+                  </label>
+                </div>
+
+
+                <!-- Opções individuais -->
+                <div class="form-check" *ngFor="let status of statusOptions">
+                  <input class="form-check-input" type="checkbox" [checked]="isChecked(filtros.status, status.value)"
+                    (change)="toggleSelection(filtros.status!, status.value)" [id]="'status' + status.value">
+                  <label class="form-check-label" [for]="'status' + status.value">
+                    {{ status.label }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 col-sm-12">
+            <label class="form-label">
+              <i class="fa fa-exclamation-circle me-1"></i>
+              Prioridade
+            </label>
+
+            <div class="multi-dropdown">
+              <button type="button" class="form-select text-start" (click)="toggleDropdown('prioridade')"
+                [class.active]="dropdownAberto === 'prioridade'">
+                <span>{{ getTextoSelecionado(filtros.prioridade, prioridadeOptions, 'Prioridade') }}</span>
+                <i class="fa fa-chevron-down dropdown-icon" [class.rotate]="dropdownAberto === 'prioridade'"></i>
+              </button>
+
+              <div class="dropdown-menu-checks" [class.show]="dropdownAberto === 'prioridade'">
+
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox"
+                    [checked]="allChecked(filtros.prioridade, prioridadeOptions)"
+                    (change)="toggleAll(filtros.prioridade!, prioridadeOptions, $any($event.target).checked)"
+                    id="prioridadeTodos">
+                  <label class="form-check-label fw-bold" for="prioridadeTodos">
+                    Todas
+                  </label>
+                </div>
+
+                <div class="form-check" *ngFor="let prioridade of prioridadeOptions">
+                  <input class="form-check-input" type="checkbox"
+                    [checked]="isChecked(filtros.prioridade, prioridade.value)"
+                    (change)="toggleSelection(filtros.prioridade!, prioridade.value)"
+                    [id]="'prioridade' + prioridade.value">
+                  <label class="form-check-label" [for]="'prioridade' + prioridade.value">
+                    {{ prioridade.label }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 col-sm-12">
+            <label class="form-label">
+              <i class="fa fa-users me-1"></i>
+              Equipe
+            </label>
+
+            <div class="multi-dropdown">
+              <button type="button" class="form-select text-start" (click)="toggleDropdown('equipe')"
+                [class.active]="dropdownAberto === 'equipe'">
+                <span>{{ getTextoSelecionado(filtros.equipe, equipeOptions, 'Equipe') }}</span>
+                <i class="fa fa-chevron-down dropdown-icon" [class.rotate]="dropdownAberto === 'equipe'"></i>
+              </button>
+
+              <div class="dropdown-menu-checks" [class.show]="dropdownAberto === 'equipe'">
+
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" [checked]="allChecked(filtros.equipe, equipeOptions)"
+                    (change)="toggleAll(filtros.equipe!, equipeOptions, $any($event.target).checked)" id="equipeTodos">
+                  <label class="form-check-label fw-bold" for="equipeTodos">
+                    Todas
+                  </label>
+                </div>
+
+                <div class="form-check" *ngFor="let equipe of equipeOptions">
+                  <input class="form-check-input" type="checkbox" [checked]="isChecked(filtros.equipe, equipe.value)"
+                    (change)="toggleSelection(filtros.equipe!, equipe.value)" [id]="'equipe' + equipe.value">
+                  <label class="form-check-label" [for]="'equipe' + equipe.value">
+                    {{ equipe.label }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Funcionário -->
+          <div class="col-lg-2 col-md-6 col-sm-12">
+            <label class="form-label">
+              <i class="fa fa-user me-1"></i>
+              Funcionário
+            </label>
+            <input type="text" class="form-control" [(ngModel)]="filtros.funcionario" name="funcionario"
+              placeholder="Digite o nome do funcionário">
+          </div>
+
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="filter-actions mt-4">
+          <button type="submit" class="btn btn-primary btn-search" [disabled]="carregando">
+            <i class="fa fa-search me-2"></i>
+            {{ carregando ? 'Buscando...' : 'Buscar' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="limparFiltros()" [disabled]="carregando">
+            <i class="fa fa-eraser me-2"></i>
+            Limpar Filtros
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- ========== RESUMO DE RESULTADOS ========== -->
+  <div class="results-summary" *ngIf="!carregando && !erro">
+    <div class="summary-info">
+      <i class="fa fa-check-circle me-2"></i>
+      <span><strong>{{ ticketsFiltrados.length }}</strong> tickets encontrados</span>
+    </div>
+    <div class="summary-pagination">
+      <span>Mostrando {{ (paginaAtual - 1) * itensPorPagina + 1 }}
+        a {{ Math.min(paginaAtual * itensPorPagina, ticketsFiltrados.length) }}
+        de {{ ticketsFiltrados.length }}</span>
+    </div>
+  </div>
+
+  <!-- ========== TABELA DE RELATÓRIOS ========== -->
+  <div class="table-card">
+    <div class="table-header">
+      <i class="fa fa-table me-2"></i>
+      <span>Relatório Detalhado</span>
+      <span class="badge bg-primary ms-2">{{ ticketsFiltrados.length || 0 }}</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-modern">
+        <thead>
+          <tr>
+            <th class="text-center">ID</th>
+            <th>Descrição</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Prioridade</th>
+            <th>Equipe Responsável</th>
+            <th>Responsável</th>
+            <th class="text-center">Data Criação</th>
+            <th class="text-center">Data Resolução</th>
+            <th class="text-center">Tempo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Loading -->
+          <tr *ngIf="carregando">
+            <td colspan="9" class="text-center">
+              <div class="loading-spinner-inline">
+                <i class="fa fa-spinner fa-spin me-2"></i>
+                Carregando relatório...
+              </div>
+            </td>
+          </tr>
+
+          <!-- Erro -->
+          <tr *ngIf="!carregando && erro">
+            <td colspan="9" class="text-center">
+              <div class="error-message-inline">
+                <i class="fa fa-exclamation-triangle me-2"></i>
+                {{ mensagemErro }}
+              </div>
+            </td>
+          </tr>
+
+          <!-- Sem Dados -->
+          <tr *ngIf="!carregando && !erro && ticketsFiltrados.length === 0">
+            <td colspan="9" class="text-center">
+              <div class="empty-state">
+                <i class="fa fa-inbox"></i>
+                <p>Nenhum ticket encontrado com os filtros aplicados</p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Dados -->
+          <tr *ngFor="let ticket of getTicketsPaginados()">
+            <td class="text-center">
+              <span class="ticket-id">#{{ ticket.id }}</span>
+            </td>
+            <td>
+              <div class="ticket-description">
+                {{ ticket.descricao }}
+              </div>
+            </td>
+            <td class="text-center">
+              <span class="status-indicador" [ngClass]="getClasseStatus(ticket.status)">
+                <span class="status-bolinha"></span>
+                {{ ticket.status.replace('_', ' ') }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span class="badge-priority" [ngClass]="getClassePrioridade(ticket.prioridade)">
+                <span class="priority-bolinha"></span>
+                {{ ticket.prioridade }}
+              </span>
+            </td>
+            <td>
+              <span class="badge badge-secondary">{{ ticket.equipeResponsavel || '-' }}</span>
+            </td>
+            <td>
+              <div class="responsavel-info">
+                <i class="fa fa-user-circle me-2"></i>
+                <span>{{ ticket.funcionarioResponsavel || '-' }}</span>
+              </div>
+            </td>
+            <td class="text-center">
+              <span class="date-badge">{{ formatarDataExibicao(ticket.dataCriacao) }}</span>
+            </td>
+            <td class="text-center">
+              <span class="date-badge">{{ formatarDataExibicao(ticket.dataResolucao) }}</span>
+            </td>
+            <td class="text-center">
+              <span class="time-badge">{{ formatarTempo(ticket.tempoResolucao) }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ========== PAGINAÇÃO ========== -->
+    <div class="pagination-wrapper" *ngIf="!carregando && !erro && ticketsFiltrados.length > 0">
+      <div class="pagination-info">
+        Página {{ paginaAtual }} de {{ getTotalPaginas() }}
+      </div>
+      <nav class="pagination-nav">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="paginaAtual === 1">
+            <button class="page-link" (click)="paginaAnterior()" [disabled]="paginaAtual === 1">
+              <i class="fa fa-chevron-left"></i>
+            </button>
+          </li>
+          <li class="page-item" *ngFor="let pagina of getPaginas()" [class.active]="pagina === paginaAtual">
+            <button class="page-link" (click)="irParaPagina(pagina)">
+              {{ pagina }}
+            </button>
+          </li>
+          <li class="page-item" [class.disabled]="paginaAtual === getTotalPaginas()">
+            <button class="page-link" (click)="proximaPagina()" [disabled]="paginaAtual === getTotalPaginas()">
+              <i class="fa fa-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+      <div class="items-per-page">
+        <select class="form-select form-select-sm" [(ngModel)]="itensPorPagina" (change)="paginaAtual = 1">
+          <option [value]="10">10 por página</option>
+          <option [value]="25">25 por página</option>
+          <option [value]="50">50 por página</option>
+          <option [value]="100">100 por página</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+</div>

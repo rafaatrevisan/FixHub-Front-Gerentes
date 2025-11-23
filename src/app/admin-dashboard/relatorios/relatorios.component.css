@@ -1,0 +1,613 @@
+/* ============================================
+   IMPORTAÇÃO DE FONTE
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================
+   VARIÁVEIS GLOBAIS
+   ============================================ */
+:root {
+  /* Cores Primárias */
+  --primary-color: #0c9fe4;
+  --primary-hover: #0884c0;
+  --primary-light: #d1f1ff;
+
+  /* Cores Secundárias */
+  --success-color: #10b981;
+  --success-hover: #059669;
+  --success-light: #d1fae5;
+
+  --warning-color: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-light: #fef3c7;
+
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
+  --danger-light: #fee2e2;
+
+  /* Cores Neutras */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+
+  /* Radius e Transição */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition: all 0.3s ease;
+}
+
+/* ============================================
+   ESTILO GLOBAL
+   ============================================ */
+*:not(i):not(.fa):not(.fa-solid):not(.fa-regular):not(.fa-brands) {
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+  color: var(--gray-800);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ============================================
+   CABEÇALHO DA PÁGINA (TONALIDADE AJUSTADA)
+   ============================================ */
+.page-header {
+  background: linear-gradient(135deg, #0c9fe4 0%, #0884c0 100%);
+  padding: 2.5rem 0;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+  color: #ffffff;
+}
+
+.page-header .container {
+  text-align: left;
+}
+
+.page-title {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.page-title i {
+  color: #d1f1ff;
+}
+
+.page-subtitle {
+  color: #e0f7ff;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+/* ============================================
+   CONTAINER PRINCIPAL
+   ============================================ */
+.main-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+/* ============================================
+   BOTÕES PADRONIZADOS
+   ============================================ */
+.btn-refresh,
+.btn-export,
+.btn-add {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-refresh {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+}
+
+.btn-refresh:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.btn-export {
+  background-color: var(--success-color);
+  color: #fff;
+  border: none;
+}
+
+.btn-export:hover:not(:disabled) {
+  background-color: var(--success-hover);
+  transform: translateY(-2px);
+}
+
+.btn-export:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   CONTAINER E FILTROS
+   ============================================ */
+.main-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.filter-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  margin-bottom: 1.5rem;
+}
+
+.filter-header {
+  background: linear-gradient(to right, var(--gray-50), #fff);
+  padding: 1rem 1.5rem;
+  border-bottom: 2px solid var(--primary-color);
+  font-weight: 600;
+  color: var(--gray-700);
+}
+
+/* ============================================
+   TABELAS MODERNAS
+   ============================================ */
+.table-modern tbody tr:hover td {
+  background-color: #f1f1f1;
+  transition: background-color 0.3s ease;
+}
+
+.table-modern th {
+  background-color: var(--gray-100);
+  font-weight: 600;
+  color: var(--gray-700);
+}
+
+/* ============================================
+   RESUMOS E BADGES
+   ============================================ */
+.results-summary {
+  background: linear-gradient(135deg, var(--primary-light), #fff);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--primary-color);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.status-aberto {
+  background: var(--danger-light);
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+}
+
+.status-andamento {
+  background: var(--warning-light);
+  color: var(--warning-color);
+  border: 1px solid var(--warning-color);
+}
+
+.status-resolvido {
+  background: var(--success-light);
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
+}
+
+/* ============================================
+   PAGINAÇÃO
+   ============================================ */
+.pagination-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-top: 1px solid var(--gray-200);
+  background: var(--gray-50);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Botão ativo (página atual) */
+.pagination .page-item.active .page-link {
+  background-color: #0c9fe4;
+  border-color: #0c9fe4;
+  color: #fff;
+}
+
+/* Hover nos botões de página */
+.pagination .page-link:hover {
+  background-color: #0884c0;
+  border-color: #0884c0;
+  color: #fff;
+}
+
+/* Setas de navegação */
+.pagination .page-link {
+  color: #0c9fe4;
+}
+
+/* Setas em hover */
+.pagination .page-link:hover i {
+  color: #fff;
+}
+
+/* Focus nos botões */
+.pagination .page-link:focus {
+  box-shadow: 0 0 0 0.25rem rgba(12, 159, 228, 0.25);
+  border-color: #0c9fe4;
+}
+
+/* Botões desabilitados (mantém cinza) */
+.pagination .page-item.disabled .page-link {
+  color: #6c757d;
+  background-color: #fff;
+  border-color: #dee2e6;
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+@media (max-width: 992px) {
+  .page-header .d-flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+
+  .btn-refresh,
+  .btn-export {
+    width: 100%;
+  }
+
+  .table-modern {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .results-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pagination-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.btn-primary {
+  background-color: #0c9fe4;
+  border: none;
+  margin-right: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #0884c0;
+  border: none;
+}
+
+.bg-primary {
+  background-color: #0c9fe4 !important;
+}
+
+.btn-secondary {
+  border: none;
+}
+
+.btn-secondary:hover {
+  border: none;
+}
+
+/* ====== BADGES (Status e Prioridade) - Dashboard / Relatórios ====== */
+
+/* base shared */
+.badge-status,
+.badge-priority {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  border: none !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Indicador de Status */
+.status-indicador {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  color: #333;
+  background: transparent;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  text-transform: capitalize;
+}
+
+/* Bolinha colorida */
+.status-bolinha {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* Cores dos status */
+.status-concluido .status-bolinha {
+  background-color: #86efac; /* Verde claro */
+}
+
+.status-em_andamento .status-bolinha {
+  background-color: #fde68a; /* Amarelo suave */
+}
+
+.status-pendente .status-bolinha {
+  background-color: #bae6fd; /* Azul claro */
+}
+
+.status-reprovado .status-bolinha {
+  background-color: #d1d5db; /* Cinza */
+}
+
+/* Hover opcional */
+.status-indicador:hover .status-bolinha {
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
+
+/* Bolinha colorida */
+.priority-bolinha {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* Cores de Prioridade */
+.priority-baixa .priority-bolinha {
+  background-color: #93c5fd; /* Azul claro */
+}
+
+.priority-regular .priority-bolinha {
+  background-color: #fcd34d; /* Amarelo */
+}
+
+.priority-importante .priority-bolinha {
+  background-color: #fb923c; /* Laranja */
+}
+
+.priority-urgente .priority-bolinha {
+  background-color: #f87171; /* Vermelho */
+}
+
+/* Hover opcional */
+.badge-priority:hover .priority-bolinha {
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
+
+/* Ajustes na tabela */
+.table .badge-status,
+.table .badge-priority {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+}
+
+.badge-status:focus,
+.badge-priority:focus {
+  outline: 3px solid rgba(0, 0, 0, 0.06);
+  outline-offset: 2px;
+}
+
+.badge-priority.priority-baixa,
+.badge-priority.priority-regular,
+.badge-priority.priority-importante,
+.badge-priority.priority-urgente {
+  display: inline-block;
+}
+
+.table .badge-status,
+.table .badge-priority {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+}
+
+.badge-status:focus,
+.badge-priority:focus {
+  outline: 3px solid rgba(0,0,0,0.06);
+  outline-offset: 2px;
+}
+
+.badge-secondary {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.badge-success {
+  background: #d1fae5;
+  color: #10b981;
+}
+
+.badge-warning {
+  background: #fef3c7;
+  color: #f59e0b;
+}
+
+.badge-primary {
+  background: #d1f1ff;
+  color: #0c9fe4;
+}
+
+.time-badge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  background: #f3f4f6; 
+  border-radius: 6px; 
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.multi-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+/* Botão que simula select */
+.multi-dropdown .form-select {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: #fff;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  padding: 0.375rem 0.75rem;
+  transition: all 0.2s ease;
+  background-image: none !important; 
+}
+
+.multi-dropdown .form-select:hover {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+.multi-dropdown .form-select.active {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  outline: none;
+}
+
+.multi-dropdown .form-select:focus {
+  outline: none;
+}
+
+/* Ícone do dropdown */
+.dropdown-icon {
+  transition: transform 0.3s ease;
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.dropdown-icon.rotate {
+  transform: rotate(180deg);
+}
+
+/* Menu dropdown */
+.dropdown-menu-checks {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  padding: 8px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  max-height: 280px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: none;
+}
+
+.dropdown-menu-checks.show {
+  display: block;
+  animation: fadeInDown 0.2s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Divider - REMOVIDO */
+
+/* Checkboxes dentro do dropdown */
+.dropdown-menu-checks .form-check {
+  padding: 8px 12px;
+  margin-bottom: 2px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-menu-checks .form-check:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-menu-checks .form-check-input {
+  display: none;
+}
+
+.dropdown-menu-checks .form-check-label {
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+  flex-grow: 1;
+}
+
+/* Scrollbar customizada */
+.dropdown-menu-checks::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-menu-checks::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.dropdown-menu-checks::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.dropdown-menu-checks::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
