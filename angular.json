@@ -23,7 +23,9 @@
                 "glob": "**/*",
                 "input": "public"
               },
-              "src/_redirects"
+              "src/_redirects",
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "src/styles.css",

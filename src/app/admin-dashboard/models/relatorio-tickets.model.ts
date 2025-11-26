@@ -7,6 +7,7 @@ export interface RelatorioTicketsDTO {
   dataCriacao: string;
   dataResolucao?: string;
   funcionarioResponsavel?: string;
+  descricaoResolucao?: string;
   tempoResolucao?: number;
   cliente?: string;
 }
