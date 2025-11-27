@@ -221,6 +221,7 @@
             <th>Responsável</th>
             <th class="text-center">Data Criação</th>
             <th class="text-center">Data Resolução</th>
+            <th class="text-center">Descrição da Resolução</th>
             <th class="text-center">Tempo</th>
           </tr>
         </thead>
@@ -291,6 +292,11 @@
             </td>
             <td class="text-center">
               <span class="date-badge">{{ formatarDataExibicao(ticket.dataResolucao) }}</span>
+            </td>
+            <td>
+              <div class="ticket-description">
+                {{ ticket.descricaoResolucao || '-' }}
+              </div>
             </td>
             <td class="text-center">
               <span class="time-badge">{{ formatarTempo(ticket.tempoResolucao) }}</span>

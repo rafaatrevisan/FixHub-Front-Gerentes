@@ -103,11 +103,6 @@ export class DashboardComponent implements OnInit {
     const inicio = this.converterStringParaDate(this.dataInicio);
     const fim = this.converterStringParaDate(this.dataFim);
 
-    console.log('📅 Filtros aplicados:', {
-      dataInicio: inicio,
-      dataFim: fim
-    });
-
     this.carregarResumo(inicio, fim);
     this.carregarGraficos(inicio, fim);
     this.carregarDesempenhoFuncionarios(inicio, fim);
@@ -124,7 +119,6 @@ export class DashboardComponent implements OnInit {
       next: (data) => {
         this.resumo = data ?? this.resumo;
         this.carregandoResumo = false;
-        console.log('✅ Resumo carregado:', data);
       },
       error: (error) => {
         console.error('❌ Erro ao carregar resumo:', error);
@@ -147,7 +141,6 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getTicketsPorStatus(dataInicio, dataFim).subscribe({
       next: (data) => {
         this.ticketsPorStatus = data ?? [];
-        console.log('✅ Tickets por status carregados:', data);
       },
       error: (error) => {
         console.error('❌ Erro ao carregar tickets por status:', error);
@@ -159,7 +152,6 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getTicketsPorPrioridade(dataInicio, dataFim).subscribe({
       next: (data) => {
         this.ticketsPorPrioridade = data ?? [];
-        console.log('✅ Tickets por prioridade carregados:', data);
       },
       error: (error) => {
         console.error('❌ Erro ao carregar tickets por prioridade:', error);
@@ -172,7 +164,6 @@ export class DashboardComponent implements OnInit {
       next: (data) => {
         this.ticketsPorEquipe = data ?? [];
         this.carregandoGraficos = false;
-        console.log('✅ Tickets por equipe carregados:', data);
       },
       error: (error) => {
         console.error('❌ Erro ao carregar tickets por equipe:', error);
@@ -193,7 +184,6 @@ export class DashboardComponent implements OnInit {
       next: (data) => {
         this.desempenhoFuncionarios = data ?? [];
         this.carregandoDesempenho = false;
-        console.log('✅ Desempenho carregado:', data);
       },
       error: (error) => {
         console.error('❌ Erro ao carregar desempenho:', error);
@@ -232,7 +222,6 @@ export class DashboardComponent implements OnInit {
    * Atualiza os dados do dashboard com os filtros aplicados
    */
   atualizarDashboard(): void {
-    console.log('🔄 Atualizando dashboard...');
     this.carregarDadosDashboard();
   }
 
@@ -240,7 +229,6 @@ export class DashboardComponent implements OnInit {
    * Limpa os filtros e recarrega (últimos 30 dias)
    */
   limparFiltros(): void {
-    console.log('🧹 Limpando filtros...');
     this.definirFiltroInicial();
     this.carregarDadosDashboard();
   }

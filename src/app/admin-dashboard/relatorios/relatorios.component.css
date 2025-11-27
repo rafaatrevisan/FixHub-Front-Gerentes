@@ -479,12 +479,12 @@ body {
 
 .time-badge {
   display: inline-block;
-  padding: 0.375rem 0.75rem;
+  padding: 0.375rem 0.5rem;
   background: #f3f4f6; 
   border-radius: 6px; 
   font-weight: 600;
   color: #374151;
-  font-size: 0.875rem;
+  font-size: 0.72rem;
 }
 
 .multi-dropdown {

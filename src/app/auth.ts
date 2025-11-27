@@ -12,12 +12,12 @@ export class AuthService {
 
   login(username: string, password: string) {
     return axios.post(this.apiUrl, { username, password })
-      .then(response => {
+      .then((response: any) => {
         const token = response.data.token;
         localStorage.setItem('token', token);
         this.router.navigate(['/home']);
       })
-      .catch(error => {
+      .catch((error: any) => {
         console.error('Erro de autenticação:', error);
         throw error;
       });
