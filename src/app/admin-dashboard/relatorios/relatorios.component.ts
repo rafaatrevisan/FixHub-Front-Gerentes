@@ -59,8 +59,16 @@ export class RelatoriosComponent implements OnInit {
   constructor(private relatoriosService: RelatoriosService) { }
 
   ngOnInit(): void {
+    this.definirFiltrosPadrao();
     this.definirDatasIniciais();
     this.buscarRelatorio();
+  }
+
+  definirFiltrosPadrao(): void {
+    this.filtros.status = ['PENDENTE', 'EM_ANDAMENTO'];
+    this.filtros.prioridade = [];
+    this.filtros.equipe = [];
+    this.filtros.funcionario = '';
   }
 
   definirDatasIniciais(): void {
@@ -250,43 +258,43 @@ export class RelatoriosComponent implements OnInit {
   }
 
   // Adicione estas propriedades na sua classe
-dropdownAberto: string | null = null;
+  dropdownAberto: string | null = null;
 
-// Método para abrir/fechar dropdown
-toggleDropdown(campo: string) {
-  if (this.dropdownAberto === campo) {
-    this.dropdownAberto = null;
-  } else {
-    this.dropdownAberto = campo;
+  // Método para abrir/fechar dropdown
+  toggleDropdown(campo: string) {
+    if (this.dropdownAberto === campo) {
+      this.dropdownAberto = null;
+    } else {
+      this.dropdownAberto = campo;
+    }
   }
-}
 
-// Método para gerar texto do botão
-getTextoSelecionado(
-  arrayFiltro: string[] | undefined, 
-  opcoes: {value: string, label: string}[], 
-  placeholder: string
-): string {
-  if (!arrayFiltro || arrayFiltro.length === 0 || arrayFiltro.length === opcoes.length) {
-    return `Todos (${opcoes.length})`;
-  }
-  
-  if (arrayFiltro.length === 1) {
-    const opcao = opcoes.find(o => o.value === arrayFiltro[0]);
-    return opcao ? opcao.label : placeholder;
-  }
-  
-  return `${arrayFiltro.length} selecionados`;
-}
+  // Método para gerar texto do botão
+  getTextoSelecionado(
+    arrayFiltro: string[] | undefined,
+    opcoes: { value: string, label: string }[],
+    placeholder: string
+  ): string {
+    if (!arrayFiltro || arrayFiltro.length === 0 || arrayFiltro.length === opcoes.length) {
+      return `Todos (${opcoes.length})`;
+    }
 
-// Fechar dropdown ao clicar fora (adicione no ngOnInit ou construtor)
-@HostListener('document:click', ['$event'])
-fecharDropdownExterno(event: MouseEvent) {
-  const target = event.target as HTMLElement;
-  if (!target.closest('.multi-dropdown')) {
-    this.dropdownAberto = null;
+    if (arrayFiltro.length === 1) {
+      const opcao = opcoes.find(o => o.value === arrayFiltro[0]);
+      return opcao ? opcao.label : placeholder;
+    }
+
+    return `${arrayFiltro.length} selecionados`;
   }
-}
+
+  // Fechar dropdown ao clicar fora (adicione no ngOnInit ou construtor)
+  @HostListener('document:click', ['$event'])
+  fecharDropdownExterno(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.multi-dropdown')) {
+      this.dropdownAberto = null;
+    }
+  }
 
 }
 
